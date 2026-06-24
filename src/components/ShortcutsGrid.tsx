@@ -104,7 +104,7 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
             <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("common.icon")}</label>
             <div className="flex gap-2 flex-wrap">
               {ICON_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" onClick={() => setIcon(opt.value)} className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${icon === opt.value ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900" : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-white/10}`}>
+                <button key={opt.value} type="button" onClick={() => setIcon(opt.value)} className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${icon === opt.value ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900" : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-white/10"}`}>
                   {t(opt.labelKey)}
                 </button>
               ))}
