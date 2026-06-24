@@ -5,8 +5,8 @@ export default async function handler(req, res) {
 
   try {
     let resp = await doFetch();
-    // PUT 404 → try MKCOL parent, then retry
-    if (method === "PUT" && resp.status === 404) {
+    // PUT 404/409 → try MKCOL parent, then retry (Nutstore uses 409 for missing ancestors)
+    if (method === "PUT" && (resp.status === 404 || resp.status === 409)) {
       const parts = url.replace(/\/+$/, "").split("/");
       parts.pop();
       const parentUrl = parts.join("/");

@@ -16,8 +16,8 @@ function webdavProxy(): Plugin {
 
         try {
           let resp = await doFetch();
-          // PUT 404 → try MKCOL parent, then retry
-          if (method === "PUT" && resp.status === 404) {
+          // PUT 404/409 → try MKCOL parent, then retry (Nutstore uses 409 for missing ancestors)
+          if (method === "PUT" && (resp.status === 404 || resp.status === 409)) {
             const parentUrl = url.replace(/\/+$/, "").split("/").slice(0, -1).join("/");
             const mk = await fetch(parentUrl, { method: "MKCOL", headers: { Authorization: auth || "" } });
             if (mk.status < 400 || mk.status === 405) resp = await doFetch();
