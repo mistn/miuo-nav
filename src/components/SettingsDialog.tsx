@@ -248,7 +248,7 @@ export function SettingsDialog({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer header-icon"
         aria-label={t("settings.title")}
       >
         <Settings className="size-4" />

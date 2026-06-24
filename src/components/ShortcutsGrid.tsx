@@ -178,7 +178,7 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 drop-shadow-sm text-center mt-2"
+                  className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2 shortcut-label"
                 >
                   {item.label}
                 </a>

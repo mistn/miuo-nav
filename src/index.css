@@ -131,3 +131,12 @@
 html {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* 背景激活时：顶部渐变遮罩 + 文字投影提高可读性 */
+.bg-active .header-text,
+.bg-active .header-icon {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+.bg-active .shortcut-label {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}

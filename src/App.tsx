@@ -63,8 +63,13 @@ function AppContent() {
     <div className="relative min-h-screen">
       <BackgroundLayer url={bgUrl} enabled={bgConfig.enabled} />
       <div className={`relative z-10 flex flex-col min-h-screen transition-colors duration-300 ${
-        bgActive ? "bg-transparent" : "bg-slate-50 dark:bg-slate-950"
+        bgActive ? "bg-transparent bg-active" : "bg-slate-50 dark:bg-slate-950"
       }`}>
+        {/*
+          背景图片激活时在顶部叠加一个半透明渐变，
+          让白色文字图标在亮色背景上依然清晰
+        */}
+        {bgActive && <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-black/40 to-transparent pointer-events-none z-0" />}
         <header className="relative z-50 flex items-center justify-between px-4 sm:px-8 pt-4 sm:pt-7 flex-wrap gap-2">
           <div className="flex items-center gap-3">
             <Sidebar bookmarks={bookmarks} onDelete={handleDelete} />

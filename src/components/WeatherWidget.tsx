@@ -50,8 +50,8 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   if (!apiKey || !cityCode) {
     return (
       <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500">
-        <CloudOff className="size-4" />
-        <span>{t("weather.offline")}</span>
+        <CloudOff className="size-4 header-icon" />
+        <span className="header-text">{t("weather.offline")}</span>
       </div>
     );
   }
@@ -59,8 +59,8 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   if (isLoading) {
     return (
       <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500">
-        <CloudSun className="size-4 animate-pulse" />
-        <span>—°</span>
+        <CloudSun className="size-4 animate-pulse header-icon" />
+        <span className="header-text">—°</span>
       </div>
     );
   }
@@ -68,17 +68,17 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   if (isError || !weather) {
     return (
       <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500">
-        <CloudOff className="size-4" />
-        <span>{t("weather.offline")}</span>
+        <CloudOff className="size-4 header-icon" />
+        <span className="header-text">{t("weather.offline")}</span>
       </div>
     );
   }
 
   return (
     <div className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400">
-      <CloudSun className="size-4" />
-      <span>{weather.temperature}°</span>
-      <span className="text-slate-400 dark:text-slate-500">{city}</span>
+      <CloudSun className="size-4 header-icon" />
+      <span className="header-text">{weather.temperature}°</span>
+      <span className="text-slate-400 dark:text-slate-500 header-text">{city}</span>
     </div>
   );
 }

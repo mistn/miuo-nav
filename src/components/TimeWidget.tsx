@@ -15,5 +15,5 @@ export function TimeWidget() {
   const h = now.getHours().toString().padStart(2, "0");
   const m = now.getMinutes().toString().padStart(2, "0");
 
-  return <span className="text-sm text-slate-600 dark:text-slate-400 tabular-nums">{h}:{m}</span>;
+  return <span className="text-sm text-slate-600 dark:text-slate-400 tabular-nums header-text">{h}:{m}</span>;
 }
