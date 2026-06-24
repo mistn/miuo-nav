@@ -64,10 +64,10 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
   return (
     <>
       <button onClick={() => setOpen(true)} className="group flex flex-col items-center gap-2">
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-white/[0.07] dark:backdrop-blur-xl shadow-sm border border-dashed border-gray-200/80 dark:border-white/10 transition-all duration-200 group-hover:shadow-md group-hover:scale-105 dark:group-hover:bg-white/[0.12]">
-          <Plus className="size-5 text-gray-400 dark:text-zinc-400" />
+        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-dashed border-slate-300 shadow-none dark:bg-zinc-950 dark:border dark:border-dashed dark:border-zinc-700 dark:shadow-none transition-all duration-200 group-hover:scale-105 dark:group-hover:bg-zinc-800">
+          <Plus className="size-5 text-slate-800 font-medium dark:text-zinc-200" />
         </div>
-        <span className="text-xs text-gray-400 dark:text-zinc-400">{t("common.add")}</span>
+        <span className="text-xs text-slate-700 dark:text-zinc-400 font-semibold">{t("common.add")}</span>
       </button>
 
       {open && (

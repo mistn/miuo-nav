@@ -81,7 +81,7 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white dark:bg-zinc-950 rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden transition-colors duration-300 border dark:border-white/10">
+      <div className="relative bg-white dark:bg-zinc-950 rounded-2xl w-full max-w-md mx-4 overflow-hidden transition-colors duration-300 border dark:border-zinc-700">
         <div className="flex items-center justify-between p-6 pb-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-100">{t("shortcuts.edit_title")}</h2>
@@ -176,22 +176,22 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                     className="block"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {/* 高 tint 玻璃拟态：黑底/白边保证暗色模式下图标与背景充分分离，text-slate-800/zinc-100 无需阴影即可清晰阅读 */}
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm dark:bg-black/60 dark:backdrop-blur-xl dark:border dark:border-white/10 dark:shadow-none transition-all duration-200 hover:shadow-md hover:scale-105 dark:hover:bg-white/20 cursor-pointer">
+                    {/* 纯扁平 wireframe 风格：无阴影、实色 bg-white / dark:bg-zinc-950、锐利 1px 边框 */}
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-slate-300 shadow-none dark:bg-zinc-950 dark:border dark:border-zinc-700 dark:shadow-none transition-all duration-200 hover:scale-105 dark:hover:bg-zinc-800 cursor-pointer">
                       {domain ? (
                         <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
                       ) : (
-                        <Icon className="size-5 text-gray-600 dark:text-white" />
+                        <Icon className="size-5 text-slate-800 font-medium dark:text-zinc-200" />
                       )}
                     </div>
                   </a>
                 </ContextMenuTrigger>
-                {/* 高 tint 玻璃本身已提供足够对比度，文字无需额外阴影，保持清晰锐利 */}
+                {/* 极简标签：纯扁平文字，无阴影，配合线稿壁纸 */}
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-slate-800 font-medium dark:text-zinc-100 text-center mt-2 shortcut-label"
+                  className="text-xs text-slate-700 dark:text-zinc-400 font-semibold text-center mt-2 shortcut-label"
                 >
                   {item.label}
                 </a>

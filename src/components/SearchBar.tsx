@@ -60,47 +60,50 @@ export function SearchBar() {
   }, []);
 
   return (
-    <div className="flex items-center w-full max-w-[95vw] sm:max-w-2xl rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm dark:bg-black/60 dark:backdrop-blur-xl dark:border dark:border-white/10 dark:shadow-none px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300">
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <button className="flex w-10 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:outline-none focus-visible:ring-offset-0">
-            <img
-              src={`https://www.google.com/s2/favicons?domain=${engine.domain}&sz=64`}
-              alt={engine.label}
-              className="w-5 h-5 rounded-full"
-            />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" sideOffset={6} className="min-w-[160px] rounded-xl">
-          {engines.map((eng) => (
-            <DropdownMenuItem
-              key={eng.id}
-              onClick={() => setEngine(eng)}
-              className="rounded-lg cursor-pointer"
-            >
+    <>
+      {/* 纯扁平 wireframe 风格：无阴影、实色填充、锐利 1px 边框 */}
+      <div className="flex items-center w-full max-w-[95vw] sm:max-w-2xl rounded-full bg-white border border-slate-300 shadow-none dark:bg-zinc-950 dark:border dark:border-zinc-700 dark:shadow-none px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300">
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <button className="flex w-10 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:outline-none focus-visible:ring-offset-0">
               <img
-                src={`https://www.google.com/s2/favicons?domain=${eng.domain}&sz=64`}
-                alt={eng.label}
-                className="w-5 h-5 rounded-full mr-2"
+                src={`https://www.google.com/s2/favicons?domain=${engine.domain}&sz=64`}
+                alt={engine.label}
+                className="w-5 h-5 rounded-full"
               />
-              {eng.label}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" sideOffset={6} className="min-w-[160px] rounded-xl">
+            {engines.map((eng) => (
+              <DropdownMenuItem
+                key={eng.id}
+                onClick={() => setEngine(eng)}
+                className="rounded-lg cursor-pointer"
+              >
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${eng.domain}&sz=64`}
+                  alt={eng.label}
+                  className="w-5 h-5 rounded-full mr-2"
+                />
+                {eng.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-      <input
-        data-search-input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        placeholder={t("search.placeholder")}
-        className="flex-1 min-w-0 bg-transparent border-none shadow-none text-base text-slate-800 dark:text-zinc-100 placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-      />
+        <input
+          data-search-input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          placeholder={t("search.placeholder")}
+          className="flex-1 min-w-0 bg-transparent border-none shadow-none text-base text-slate-800 font-medium dark:text-zinc-200 placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        />
 
-      <button onClick={handleSearch} className="flex shrink-0 items-center justify-center text-slate-800 dark:text-zinc-100 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none">
-        <Search className="size-5" />
-      </button>
-    </div>
+        <button onClick={handleSearch} className="flex shrink-0 items-center justify-center text-slate-800 font-medium dark:text-zinc-200 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none">
+          <Search className="size-5" />
+        </button>
+      </div>
+    </>
   );
 }

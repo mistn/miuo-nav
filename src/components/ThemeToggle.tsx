@@ -12,7 +12,7 @@ export function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
   return (
     <button
       onClick={onToggle}
-      className="relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-900 [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)] hover:text-slate-700 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-all duration-300 cursor-pointer overflow-hidden header-icon"
+      className="relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-700 dark:text-zinc-400 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all duration-300 cursor-pointer overflow-hidden header-icon"
       aria-label={t("theme.switch_to", { mode: theme === "light" ? t("theme.dark") : t("theme.light") })}
     >
       <Sun

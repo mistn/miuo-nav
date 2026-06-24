@@ -48,7 +48,7 @@ export function useBackground() {
   const handleUpload = useCallback((file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
-      setConfig((prev) => ({ ...prev, type: "upload", uploadedData: reader.result as string }));
+      setConfig((prev) => ({ ...prev, type: "upload", uploadedData: reader.result as string, enabled: true }));
     };
     reader.readAsDataURL(file);
   }, []);

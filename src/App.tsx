@@ -65,11 +65,7 @@ function AppContent() {
       <div className={`relative z-10 flex flex-col min-h-screen transition-colors duration-300 ${
         bgActive ? "bg-transparent bg-active" : "bg-slate-50 dark:bg-black"
       }`}>
-        {/*
-          背景图片激活时在顶部叠加一个半透明渐变，
-          让白色文字图标在亮色背景上依然清晰
-        */}
-        {bgActive && <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-black/40 to-transparent pointer-events-none z-0" />}
+        {/* 旧版顶部渐变已移除 — 实色玻璃元素本身已提供足够对比度，无需额外遮罩 */}
         <header className="relative z-50 flex items-center justify-between px-4 sm:px-8 pt-4 sm:pt-7 flex-wrap gap-2">
           <div className="flex items-center gap-3">
             <Sidebar bookmarks={bookmarks} onDelete={handleDelete} />
