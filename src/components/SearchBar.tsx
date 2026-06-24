@@ -60,7 +60,7 @@ export function SearchBar() {
   }, []);
 
   return (
-    <div className="flex items-center w-full max-w-[95vw] sm:max-w-2xl rounded-full bg-white/80 dark:bg-white/[0.06] dark:backdrop-blur-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-sm border border-gray-100/80 dark:border-white/10 transition-all duration-300">
+    <div className="flex items-center w-full max-w-[95vw] sm:max-w-2xl rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm dark:bg-black/60 dark:backdrop-blur-xl dark:border dark:border-white/10 dark:shadow-none px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="flex w-10 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:outline-none focus-visible:ring-offset-0">
@@ -95,10 +95,10 @@ export function SearchBar() {
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         placeholder={t("search.placeholder")}
-        className="flex-1 min-w-0 bg-transparent border-none shadow-none text-base text-gray-800 dark:text-zinc-100 placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="flex-1 min-w-0 bg-transparent border-none shadow-none text-base text-slate-800 dark:text-zinc-100 placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
 
-      <button onClick={handleSearch} className="flex shrink-0 items-center justify-center text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none">
+      <button onClick={handleSearch} className="flex shrink-0 items-center justify-center text-slate-800 dark:text-zinc-100 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none">
         <Search className="size-5" />
       </button>
     </div>

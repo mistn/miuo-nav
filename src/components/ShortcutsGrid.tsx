@@ -176,8 +176,8 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                     className="block"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {/* dark:bg-white/10 dark:backdrop-blur-lg dark:border-white/20 增强玻璃拟态对比度，确保在暗色壁纸上图标清晰可见；drop-shadow 保证文字在任何壁纸背景下均可读 */}
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-white/10 dark:backdrop-blur-lg dark:border dark:border-white/20 shadow-sm border border-gray-100/80 transition-all duration-200 hover:shadow-md hover:scale-105 dark:hover:bg-white/20 cursor-pointer">
+                    {/* 高 tint 玻璃拟态：黑底/白边保证暗色模式下图标与背景充分分离，text-slate-800/zinc-100 无需阴影即可清晰阅读 */}
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm dark:bg-black/60 dark:backdrop-blur-xl dark:border dark:border-white/10 dark:shadow-none transition-all duration-200 hover:shadow-md hover:scale-105 dark:hover:bg-white/20 cursor-pointer">
                       {domain ? (
                         <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
                       ) : (
@@ -186,12 +186,12 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                     </div>
                   </a>
                 </ContextMenuTrigger>
-                {/* text-shadow 用紧贴文字的微阴影取代 drop-shadow，保持清晰锐利，避免廉价模糊感 */}
+                {/* 高 tint 玻璃本身已提供足够对比度，文字无需额外阴影，保持清晰锐利 */}
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-slate-900 font-medium [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)] text-center mt-2 shortcut-label"
+                  className="text-xs text-slate-800 font-medium dark:text-zinc-100 text-center mt-2 shortcut-label"
                 >
                   {item.label}
                 </a>
