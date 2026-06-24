@@ -66,8 +66,20 @@ Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day.
 Synced as `miuo_nav_config.json`, includes bookmarks, weather, background, theme, language.
 
 Recommended WebDAV providers:
-- [Nutstore (坚果云)](https://www.jianguoyun.com/) — free, China-friendly
-- [Infini-Cloud](https://infini.cloud/) — global, WebDAV supported
+
+**Nutstore (坚果云)** — free, China-friendly
+| Field | Value |
+|-------|-------|
+| Server URL | `https://dav.jianguoyun.com/dav/` |
+| Username | Your Nutstore email |
+| Password | App password (Nutstore → Account → Security → Generate App Password) |
+
+**Infini-Cloud** — Japan-based, 20GB free
+| Field | Value |
+|-------|-------|
+| Server URL | Your personal WebDAV URL (`https://xxxx.teracloud.jp/dav/`, see [My Page](https://infini-cloud.net/en/modules/mypage/)) |
+| Username | Your User ID (see My Page) |
+| Password | Apps Password (My Page → Turn on Apps Connection → generate, NOT your login password) |
 
 ## Tech Stack
 
