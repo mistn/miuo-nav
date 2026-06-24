@@ -58,7 +58,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-1.5 rounded-lg text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer"
         aria-label={t("sidebar.open")}
       >
         <Menu className="size-4" />
@@ -80,7 +80,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
               </div>
               <button
                 onClick={() => setOpen(false)}
-        className="p-1.5 rounded-lg text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer header-icon"
+        className="p-1.5 rounded-lg text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer header-icon"
                 aria-label={t("sidebar.close")}
               >
                 <X className="size-4" />

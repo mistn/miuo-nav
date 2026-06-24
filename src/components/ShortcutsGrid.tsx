@@ -176,20 +176,22 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                     className="block"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-white/[0.07] dark:backdrop-blur-xl shadow-sm border border-gray-100/80 dark:border-white/10 transition-all duration-200 hover:shadow-md hover:scale-105 dark:hover:bg-white/[0.12] cursor-pointer">
+                    {/* dark:bg-white/10 dark:backdrop-blur-lg dark:border-white/20 增强玻璃拟态对比度，确保在暗色壁纸上图标清晰可见；drop-shadow 保证文字在任何壁纸背景下均可读 */}
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-white/10 dark:backdrop-blur-lg dark:border dark:border-white/20 shadow-sm border border-gray-100/80 transition-all duration-200 hover:shadow-md hover:scale-105 dark:hover:bg-white/20 cursor-pointer">
                       {domain ? (
                         <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
                       ) : (
-                        <Icon className="size-5 text-gray-600 dark:text-zinc-400" />
+                        <Icon className="size-5 text-gray-600 dark:text-white" />
                       )}
                     </div>
                   </a>
                 </ContextMenuTrigger>
+                {/* drop-shadow 确保文字在明/暗壁纸不同区域均有可读性，不受背景颜色干扰 */}
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-zinc-400 text-center mt-2 shortcut-label"
+                  className="text-xs text-slate-800 font-medium drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center mt-2 shortcut-label"
                 >
                   {item.label}
                 </a>

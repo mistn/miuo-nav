@@ -49,7 +49,8 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (!apiKey || !cityCode) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-zinc-500">
+      /* drop-shadow 保证顶部栏文字在动态壁纸上始终可读，明暗模式分别用白色/黑色阴影 */
+      <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
         <CloudOff className="size-4 header-icon" />
         <span className="header-text">{t("weather.offline")}</span>
       </div>
@@ -58,7 +59,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-zinc-500">
+      <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
         <CloudSun className="size-4 animate-pulse header-icon" />
         <span className="header-text">—°</span>
       </div>
@@ -67,7 +68,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (isError || !weather) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-zinc-500">
+      <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
         <CloudOff className="size-4 header-icon" />
         <span className="header-text">{t("weather.offline")}</span>
       </div>
@@ -75,10 +76,10 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   }
 
   return (
-    <div className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-zinc-400">
+    <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
       <CloudSun className="size-4 header-icon" />
       <span className="header-text">{weather.temperature}°</span>
-      <span className="text-slate-400 dark:text-zinc-500 header-text">{city}</span>
+      <span className="header-text">{city}</span>
     </div>
   );
 }
