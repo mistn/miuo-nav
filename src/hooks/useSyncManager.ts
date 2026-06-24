@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 
 const STORAGE_KEY = "navidash-bookmarks";
 const WEBDAV_CONFIG_KEY = "navidash-webdav";
-const REMOTE_FILE = "/miuo_nav_config.json";
+// 坚果云禁止在根目录直接写文件，必须放在子目录下
+const REMOTE_FILE = "/NaviDash/miuo_nav_config.json";
 const PROXY = "/api/webdav";
 
 // Keys to include in sync/export (excludes webdav credentials)
