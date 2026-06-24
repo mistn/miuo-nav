@@ -5,6 +5,36 @@ const STORAGE_KEY = "navidash-bookmarks";
 const WEBDAV_CONFIG_KEY = "navidash-webdav";
 const REMOTE_FILE = "/miuo_nav_config.json";
 
+// Keys to include in sync/export (excludes webdav credentials)
+const CONFIG_KEYS = [
+  "navidash-bookmarks",
+  "navidash-showWeather",
+  "navidash-weatherLoc",
+  "navidash-bg",
+  "navidash-theme",
+  "navidash-lang",
+];
+
+function collectConfig(): Record<string, unknown> {
+  const cfg: Record<string, unknown> = {};
+  for (const key of CONFIG_KEYS) {
+    const val = localStorage.getItem(key);
+    if (val !== null) {
+      try { cfg[key] = JSON.parse(val); } catch { cfg[key] = val; }
+    }
+  }
+  return cfg;
+}
+
+function restoreConfig(cfg: Record<string, unknown>): void {
+  for (const key of CONFIG_KEYS) {
+    if (key in cfg) {
+      const val = cfg[key];
+      localStorage.setItem(key, typeof val === "string" ? val : JSON.stringify(val));
+    }
+  }
+}
+
 export interface Bookmark {
   id: string;
   label: string;
@@ -101,13 +131,13 @@ export function useSyncManager() {
     setSyncing(true); setSyncMsg("");
     try {
       const client = getClient(webdavConfig);
-      const data = JSON.stringify(bookmarks, null, 2);
+      const data = JSON.stringify(collectConfig(), null, 2);
       await client.putFileContents(REMOTE_FILE, data, { overwrite: true });
       setSyncMsg("settings.pushed");
     } catch (e) {
       setSyncMsg(`settings.push_failed||${e instanceof Error ? e.message : "unknown"}`);
     } finally { setSyncing(false); }
-  }, [webdavConfig, bookmarks]);
+  }, [webdavConfig]);
 
   const pullFromCloud = useCallback(async () => {
     if (!webdavConfig) { setSyncMsg("settings.no_webdav"); return; }
@@ -117,29 +147,33 @@ export function useSyncManager() {
       const exists = await client.exists(REMOTE_FILE);
       if (!exists) { setSyncMsg("settings.no_remote"); setSyncing(false); return; }
       const content = await client.getFileContents(REMOTE_FILE, { format: "text" }) as string;
-      const parsed = JSON.parse(content) as Bookmark[];
-      setBookmarks(parsed);
+      const data = JSON.parse(content);
+      restoreConfig(data);
+      setBookmarks(loadBookmarks());
       setSyncMsg("settings.pulled");
+      window.location.reload();
     } catch (e) {
       setSyncMsg(`settings.pull_failed||${e instanceof Error ? e.message : "unknown"}`);
     } finally { setSyncing(false); }
   }, [webdavConfig]);
 
   const exportJSON = useCallback(() => {
-    const blob = new Blob([JSON.stringify(bookmarks, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(collectConfig(), null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url; a.download = "miuo_nav_config.json"; a.click();
     URL.revokeObjectURL(url);
-  }, [bookmarks]);
+  }, []);
 
   const importJSON = useCallback((file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const parsed = JSON.parse(reader.result as string) as Bookmark[];
-        setBookmarks(parsed);
+        const data = JSON.parse(reader.result as string);
+        restoreConfig(data);
+        setBookmarks(loadBookmarks());
         setSyncMsg("settings.imported");
+        window.location.reload();
       } catch { setSyncMsg("settings.invalid_json"); }
     };
     reader.readAsText(file);
