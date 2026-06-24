@@ -1,46 +1,64 @@
-import https from "https";
-import { URL } from "url";
+import { createClient } from "webdav";
 
-function request(urlStr, method, headers, body, redirects = 5) {
-  return new Promise((resolve, reject) => {
-    const u = new URL(urlStr);
-    const opts = {
-      hostname: u.hostname, port: u.port || 443, path: u.pathname + u.search,
-      method, headers: { ...headers, Host: u.hostname },
-      rejectUnauthorized: true,
-    };
-    const req = https.request(opts, (res) => {
-      if (redirects > 0 && res.statusCode >= 301 && res.statusCode <= 308 && res.headers.location) {
-        const loc = new URL(res.headers.location, urlStr).toString();
-        return resolve(request(loc, method, headers, body, redirects - 1));
-      }
-      const chunks = [];
-      res.on("data", (c) => chunks.push(c));
-      res.on("end", () => resolve({ status: res.statusCode, body: Buffer.concat(chunks).toString() }));
-    });
-    req.on("error", reject);
-    if (body && (method === "PUT" || method === "POST" || method === "MKCOL" || method === "PATCH")) req.write(body);
-    req.end();
-  });
+function getAuthUserPass(auth) {
+  if (!auth || !auth.startsWith("Basic ")) return { username: "", password: "" };
+  const decoded = Buffer.from(auth.slice(6), "base64").toString();
+  const idx = decoded.indexOf(":");
+  return { username: decoded.slice(0, idx), password: decoded.slice(idx + 1) };
 }
 
 export default async function handler(req, res) {
-  const { url, method, body, auth } = req.body;
+  const { server, method, path, body, auth } = req.body;
+  const { username, password } = getAuthUserPass(auth);
+
+  if (!username || !password) {
+    return res.status(200).json({ status: 401, body: "Missing or invalid credentials" });
+  }
+
+  const client = createClient(server, { username, password });
   const up = (method || "GET").toUpperCase();
-  const headers = { Authorization: auth || "" };
-  if (up !== "GET" && up !== "HEAD") headers["Content-Type"] = "application/octet-stream";
 
   try {
-    let resp = await request(url, up, headers, body || undefined);
-    if (up === "PUT" && (resp.status === 404 || resp.status === 409)) {
-      const parts = url.replace(/\/+$/, "").split("/");
-      parts.pop();
-      const parentUrl = parts.join("/");
-      const mk = await request(parentUrl, "MKCOL", { Authorization: auth || "" }, null);
-      if (mk.status < 400 || mk.status === 405) resp = await request(url, up, headers, body || undefined);
+    if (up === "GET") {
+      const data = await client.getFileContents(path, { format: "text" });
+      return res.status(200).json({ status: 200, body: data });
     }
-    res.status(200).json({ status: resp.status, body: resp.body });
+
+    if (up === "PUT") {
+      const doPut = async () => {
+        await client.putFileContents(path, body || "", { overwrite: true, contentType: "application/json" });
+      };
+      try {
+        await doPut();
+        return res.status(200).json({ status: 201, body: "" });
+      } catch (putErr) {
+        const code = putErr.response?.status || putErr.status || 0;
+        if (code === 404 || code === 409) {
+          const parent = path.replace(/\/+$/, "").split("/").slice(0, -1).join("/") || "/";
+          try {
+            await client.createDirectory(parent);
+          } catch (mkErr) {
+            const mkCode = mkErr.response?.status || mkErr.status || 0;
+            if (mkCode !== 405 && mkCode >= 400) {
+              return res.status(200).json({ status: mkCode, body: mkErr.message || String(mkErr) });
+            }
+          }
+          await doPut();
+          return res.status(200).json({ status: 201, body: "" });
+        }
+        throw putErr;
+      }
+    }
+
+    if (up === "MKCOL") {
+      await client.createDirectory(path);
+      return res.status(200).json({ status: 201, body: "" });
+    }
+
+    return res.status(200).json({ status: 405, body: "Method not allowed" });
   } catch (e) {
-    res.status(502).json({ status: 502, body: String(e) });
+    const status = e.response?.status || e.status || 502;
+    const errBody = e.response?.statusText || e.message || String(e);
+    return res.status(200).json({ status, body: errBody });
   }
 }
