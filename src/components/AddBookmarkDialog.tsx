@@ -63,11 +63,13 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="group flex flex-col items-center gap-2">
+      {/* 严格基线对齐：与 ShortcutsGrid 每项完全相同的 wrapper 结构 */}
+      <button onClick={() => setOpen(true)} className="group flex flex-col items-center justify-start w-[72px] gap-1">
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-dashed border-slate-300 shadow-none dark:bg-zinc-950 dark:border dark:border-dashed dark:border-zinc-700 dark:shadow-none transition-all duration-200 group-hover:scale-105 dark:group-hover:bg-zinc-800">
-          <Plus className="size-5 text-slate-800 font-medium dark:text-zinc-200" />
+          <Plus className="size-5 text-slate-900 dark:text-white font-medium" />
         </div>
-        <span className="text-xs text-slate-700 dark:text-zinc-400 font-semibold">{t("common.add")}</span>
+        {/* 严格基线对齐：固定宽度、统一 gap、fixed leading-tight */}
+        <span className="text-xs text-slate-900 dark:text-white font-semibold tracking-wide leading-tight text-center w-full">{t("common.add")}</span>
       </button>
 
       {open && (
@@ -120,7 +122,6 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
                     </button>
                   ))}
                 </div>
-                <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t("shortcuts.custom_icon")} className="w-full h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-2 text-xs text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
               </div>
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300 cursor-pointer">
@@ -128,7 +129,8 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
                   {t("common.pin")}
                 </label>
               </div>
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex items-center gap-2 pt-2">
+                <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t("shortcuts.custom_icon")} className="flex-1 h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
                 <button type="button" onClick={() => setOpen(false)} className="px-4 h-9 rounded-xl text-sm text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer">{t("common.cancel")}</button>
                 <button type="submit" className="px-4 h-9 rounded-xl bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 transition-colors cursor-pointer">{t("common.add")}</button>
               </div>

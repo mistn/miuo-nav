@@ -58,7 +58,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-1.5 rounded-lg text-slate-700 dark:text-zinc-400 hover:text-slate-600 dark:hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-slate-900 dark:text-zinc-100 hover:text-gray-500 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
         aria-label={t("sidebar.open")}
       >
         <Menu className="size-4" />
@@ -80,7 +80,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
               </div>
               <button
                 onClick={() => setOpen(false)}
-        className="p-1.5 rounded-lg text-slate-700 dark:text-zinc-400 hover:text-slate-600 dark:hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer header-icon"
+        className="p-1.5 rounded-lg text-slate-900 dark:text-zinc-100 hover:text-gray-500 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer header-icon"
                 aria-label={t("sidebar.close")}
               >
                 <X className="size-4" />

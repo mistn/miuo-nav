@@ -50,7 +50,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   if (!apiKey || !cityCode) {
     return (
       /* 纯色扁平文字，无阴影，配合线稿壁纸的极简 wireframe 风格 */
-      <div className="flex items-center gap-1.5 text-sm text-slate-700 dark:text-zinc-400">
+      <div className="flex items-center gap-1.5 text-sm text-slate-900 dark:text-zinc-100 font-medium tracking-wide">
         <CloudOff className="size-4 header-icon" />
         <span className="header-text">{t("weather.offline")}</span>
       </div>
@@ -59,7 +59,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-700 dark:text-zinc-400">
+      <div className="flex items-center gap-1.5 text-sm text-slate-900 dark:text-zinc-100 font-medium tracking-wide">
         <CloudSun className="size-4 animate-pulse header-icon" />
         <span className="header-text">—°</span>
       </div>
@@ -68,7 +68,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (isError || !weather) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-700 dark:text-zinc-400">
+      <div className="flex items-center gap-1.5 text-sm text-slate-900 dark:text-zinc-100 font-medium tracking-wide">
         <CloudOff className="size-4 header-icon" />
         <span className="header-text">{t("weather.offline")}</span>
       </div>
@@ -76,7 +76,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   }
 
   return (
-    <div className="flex items-center gap-1.5 text-sm text-slate-700 dark:text-zinc-400">
+    <div className="flex items-center gap-1.5 text-sm text-slate-900 dark:text-zinc-100 font-medium tracking-wide">
       <CloudSun className="size-4 header-icon" />
       <span className="header-text">{weather.temperature}°</span>
       <span className="header-text">{city}</span>

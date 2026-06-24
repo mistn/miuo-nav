@@ -112,19 +112,19 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
                   <opt.icon className="size-4" />
                 </button>
               ))}
-            </div>
-            <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t("shortcuts.custom_icon")} className="w-full h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-2 text-xs text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
-          </div>
-          <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300 cursor-pointer">
-              <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} className="rounded" />
-              {t("common.pin")}
-            </label>
-          </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 h-9 rounded-xl text-sm text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer">{t("common.cancel")}</button>
-            <button type="submit" className="px-4 h-9 rounded-xl bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 transition-colors cursor-pointer">{t("common.save")}</button>
-          </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-6">
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300 cursor-pointer">
+                  <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} className="rounded" />
+                  {t("common.pin")}
+                </label>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t("shortcuts.custom_icon")} className="flex-1 h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
+                <button type="button" onClick={onClose} className="px-4 h-9 rounded-xl text-sm text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer">{t("common.cancel")}</button>
+                <button type="submit" className="px-4 h-9 rounded-xl bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 transition-colors cursor-pointer">{t("common.save")}</button>
+              </div>
         </form>
       </div>
     </div>
@@ -165,7 +165,7 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                 }
                 dragId.current = null;
               }}
-              className="flex flex-col items-center gap-2"
+              className="flex flex-col items-center justify-start w-[72px] gap-1"
             >
               <ContextMenu>
                 <ContextMenuTrigger asChild>
@@ -181,17 +181,17 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                       {domain ? (
                         <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
                       ) : (
-                        <Icon className="size-5 text-slate-800 font-medium dark:text-zinc-200" />
+                        <Icon className="size-5 text-slate-900 dark:text-white" />
                       )}
                     </div>
                   </a>
                 </ContextMenuTrigger>
-                {/* 极简标签：纯扁平文字，无阴影，配合线稿壁纸 */}
+                {/* 严格基线对齐：固定宽度 w-[72px]、间隙统一 gap-1、行高 fixed leading-tight */}
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-slate-700 dark:text-zinc-400 font-semibold text-center mt-2 shortcut-label"
+                  className="text-xs text-slate-900 dark:text-white font-semibold tracking-wide leading-tight text-center w-full shortcut-label"
                 >
                   {item.label}
                 </a>
@@ -217,7 +217,6 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
         })}
         <AddBookmarkDialog onAdd={onAdd} />
       </div>
-
       <EditBookmarkDialog
         bookmark={editing}
         onSave={onUpdate}

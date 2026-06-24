@@ -97,10 +97,10 @@ export function SearchBar() {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           placeholder={t("search.placeholder")}
-          className="flex-1 min-w-0 bg-transparent border-none shadow-none text-base text-slate-800 font-medium dark:text-zinc-200 placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="flex-1 min-w-0 bg-transparent border-none shadow-none text-base text-slate-900 dark:text-white font-medium placeholder:text-slate-500 dark:placeholder:text-zinc-400 outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
         />
 
-        <button onClick={handleSearch} className="flex shrink-0 items-center justify-center text-slate-800 font-medium dark:text-zinc-200 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none">
+        <button onClick={handleSearch} className="flex shrink-0 items-center justify-center text-slate-900 dark:text-white font-medium hover:text-gray-600 dark:hover:text-zinc-300 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none">
           <Search className="size-5" />
         </button>
       </div>
