@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Cloud, Download, Upload, Loader2, Settings, X, Languages, Eye, EyeOff, Image as ImageIcon, Link, FileUp } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Cloud, Download, Upload, Loader2, Settings, X, Languages, Eye, EyeOff, Image as ImageIcon, Link, FileUp, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { WebDAVConfig } from "@/hooks/useSyncManager";
 import type { BgConfig } from "@/hooks/useBackground";
@@ -29,41 +29,96 @@ function CitySearch({ apiKey, city, cityCode, onUpdate }: {
 }) {
   const { t } = useTranslation();
   const [searching, setSearching] = useState(false);
+  const [detecting, setDetecting] = useState(false);
+  const [suggestions, setSuggestions] = useState<{name: string; adcode: string; level: string}[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(null!);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const lookup = useCallback(async (name: string) => {
-    if (!apiKey || !name.trim()) return;
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node))
+        setShowDropdown(false);
+    };
+    document.addEventListener("mousedown", fn);
+    return () => document.removeEventListener("mousedown", fn);
+  }, []);
+
+  const searchLocations = async (name: string) => {
+    if (!apiKey || !name.trim()) { setSuggestions([]); return; }
     setSearching(true);
     try {
       const res = await fetch(`/api/amap/config/district?keywords=${encodeURIComponent(name)}&subdistrict=0&key=${apiKey}`);
       const data = await res.json();
-      if (data.status === "1" && data.districts?.[0]?.adcode) {
-        onUpdate({ apiKey, city: name, cityCode: data.districts[0].adcode });
+      if (data.status === "1" && data.districts) {
+        const list = data.districts.filter((d: any) => d.level === "city" || d.level === "district");
+        setSuggestions(list.map((d: any) => ({ name: d.name, adcode: d.adcode, level: d.level })));
+        setShowDropdown(list.length > 0);
       }
     } catch { /* silent */ }
     setSearching(false);
-  }, [apiKey, onUpdate]);
+  };
 
   const handleCityChange = (val: string) => {
     onUpdate({ apiKey, city: val, cityCode });
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => lookup(val), 600);
+    timer.current = setTimeout(() => searchLocations(val), 400);
+  };
+
+  const selectLocation = (name: string, code: string) => {
+    onUpdate({ apiKey, city: name, cityCode: code });
+    setShowDropdown(false);
+    setSuggestions([]);
+  };
+
+  const detectLocation = async () => {
+    if (!apiKey) return;
+    setDetecting(true);
+    try {
+      const res = await fetch(`/api/amap/ip?key=${apiKey}`);
+      const data = await res.json();
+      if (data.status === "1" && data.adcode) {
+        const detail = await fetch(`/api/amap/config/district?keywords=${data.adcode}&subdistrict=0&key=${apiKey}`);
+        const dd = await detail.json();
+        const name = dd.districts?.[0]?.name || data.city || data.province || "";
+        if (name) onUpdate({ apiKey, city: name, cityCode: data.adcode });
+      }
+    } catch { /* silent */ }
+    setDetecting(false);
   };
 
   return (
-    <div className="flex gap-2 items-end">
-      <div className="flex-1">
+    <div className="space-y-2">
+      <button onClick={detectLocation} disabled={!apiKey || detecting}
+        className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 disabled:opacity-40 cursor-pointer"
+      >
+        {detecting ? <Loader2 className="size-3 animate-spin" /> : <MapPin className="size-3" />}
+        {detecting ? "检测中..." : "自动检测当前位置"}
+      </button>
+      <div ref={containerRef} className="relative">
         <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
         <input value={city} onChange={(e) => handleCityChange(e.target.value)}
-          placeholder="例如 Shanghai 或 上海"
+          placeholder="输入城市或区县名称（支持中文）"
           className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1"
         />
+        {showDropdown && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto">
+            {suggestions.map((s) => (
+              <button key={s.adcode} onClick={() => selectLocation(s.name, s.adcode)}
+                className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2 cursor-pointer"
+              >
+                <span className="text-gray-900 dark:text-gray-100">{s.name}</span>
+                <span className="text-[10px] text-gray-400 ml-auto">{s.level === "district" ? "区/县" : "市"}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-      <div className="flex-1">
-        <label className="text-xs text-gray-500 dark:text-gray-400">City Code</label>
+      <div>
+        <label className="text-xs text-gray-500 dark:text-gray-400">城市代码</label>
         <div className="flex items-center gap-1 mt-1">
-          <input value={cityCode} readOnly
-            className="flex-1 h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700 px-2 text-xs text-gray-500 dark:text-gray-400 outline-none"
+          <input value={cityCode} onChange={(e) => onUpdate({ apiKey, city, cityCode: e.target.value })}
+            className="flex-1 h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring"
           />
           {searching && <Loader2 className="size-3 animate-spin text-gray-400 shrink-0" />}
         </div>
