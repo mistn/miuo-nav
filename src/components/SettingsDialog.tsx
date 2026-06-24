@@ -331,9 +331,16 @@ export function SettingsDialog({
                     <Download className="size-4" /> {t("settings.export_json")}
                   </button>
                   <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) onImport(f); }} />
-                  <button onClick={() => fileRef.current?.click()} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer flex items-center justify-center gap-1">
-                    <Upload className="size-4" /> {t("settings.import_json")}
-                  </button>
+                  <div
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) onImport(f); }}
+                    onClick={() => fileRef.current?.click()}
+                    className="w-full h-20 rounded-xl border-2 border-dashed border-gray-300 dark:border-slate-600 text-sm text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer flex flex-col items-center justify-center gap-1"
+                  >
+                    <Upload className="size-4" />
+                    <span>{t("settings.import_json")}</span>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500">支持拖拽 .json 文件到此处</span>
+                  </div>
                   {syncMsg && <p className="text-xs text-center text-gray-500 dark:text-gray-400">{translateMsg(t, syncMsg)}</p>}
                 </>
               ) : (
