@@ -66,6 +66,7 @@ export default {
     username_placeholder: "user",
     password: "Password",
     save_credentials: "Save Credentials",
+    saved: "Saved",
     pull: "Pull",
     push: "Push",
     export_json: "Export JSON",

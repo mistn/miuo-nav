@@ -66,6 +66,7 @@ export default {
     username_placeholder: "用户名",
     password: "密码",
     save_credentials: "保存凭据",
+    saved: "已保存",
     pull: "下载",
     push: "上传",
     export_json: "导出 JSON",
