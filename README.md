@@ -1,5 +1,7 @@
 # Miuo Nav
 
+> [中文文档](README.zh.md)
+
 A polished, minimalist browser start page / dashboard.
 
 - Multi-engine search (Google, DuckDuckGo, Bing, Baidu, GitHub)
