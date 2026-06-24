@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Code2, Globe, Server, HardDrive, ShieldCheck, Box } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface AddBookmarkDialogProps {
@@ -7,12 +7,12 @@ interface AddBookmarkDialogProps {
 }
 
 const ICON_OPTIONS = [
-  { value: "github", label: "icon_code" },
-  { value: "globe", label: "icon_globe" },
-  { value: "server", label: "icon_server" },
-  { value: "drive", label: "icon_drive" },
-  { value: "shield", label: "icon_shield" },
-  { value: "box", label: "icon_box" },
+  { value: "github", icon: Code2 },
+  { value: "globe", icon: Globe },
+  { value: "server", icon: Server },
+  { value: "drive", icon: HardDrive },
+  { value: "shield", icon: ShieldCheck },
+  { value: "box", icon: Box },
 ];
 
 function normalizeUrl(url: string): string {
@@ -26,20 +26,21 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
-  const [icon, setIcon] = useState("globe");
+  const [icon, setIcon] = useState("");
   const [category, setCategory] = useState("");
   const [pinned, setPinned] = useState(true);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !url.trim()) return;
+    if (!url.trim()) return;
+    const href = normalizeUrl(url);
     onAdd({
-      label: name.trim(),
-      href: normalizeUrl(url),
+      label: name.trim() || href,
+      href,
       icon,
       pinned,
       category: category.trim() || t("common.uncategorized"),
     });
-    setName(""); setUrl(""); setIcon("globe"); setCategory(""); setPinned(true);
+    setName(""); setUrl(""); setIcon(""); setCategory(""); setPinned(true);
     setOpen(false);
   };
 
@@ -106,13 +107,13 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
                       key={opt.value}
                       type="button"
                       onClick={() => setIcon(opt.value)}
-                      className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
+                      className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors cursor-pointer ${
                         icon === opt.value
                           ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900"
                           : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-white/10"
                       }`}
                     >
-                      {t(`shortcuts.${opt.label}`)}
+                      <opt.icon className="size-4" />
                     </button>
                   ))}
                 </div>

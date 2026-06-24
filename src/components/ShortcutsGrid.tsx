@@ -18,12 +18,12 @@ const ICON_MAP: Record<string, LucideIcon> = {
 };
 
 const ICON_OPTIONS = [
-  { value: "github", labelKey: "shortcuts.icon_code" },
-  { value: "globe", labelKey: "shortcuts.icon_globe" },
-  { value: "server", labelKey: "shortcuts.icon_server" },
-  { value: "drive", labelKey: "shortcuts.icon_drive" },
-  { value: "shield", labelKey: "shortcuts.icon_shield" },
-  { value: "box", labelKey: "shortcuts.icon_box" },
+  { value: "github", icon: Code2 },
+  { value: "globe", icon: Globe },
+  { value: "server", icon: Server },
+  { value: "drive", icon: HardDrive },
+  { value: "shield", icon: ShieldCheck },
+  { value: "box", icon: Box },
 ];
 
 function getDomain(href: string): string | null {
@@ -46,7 +46,7 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
   const { t } = useTranslation();
   const [name, setName] = useState(bookmark?.label ?? "");
   const [url, setUrl] = useState(bookmark?.href ?? "");
-  const [icon, setIcon] = useState(bookmark?.icon ?? "globe");
+  const [icon, setIcon] = useState(bookmark?.icon ?? "");
   const [category, setCategory] = useState(bookmark?.category ?? "");
   const [pinned, setPinned] = useState(bookmark?.pinned ?? true);
   useEffect(() => {
@@ -63,10 +63,11 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !url.trim()) return;
+    if (!url.trim()) return;
+    const href = normalizeUrl(url);
     onSave(bookmark.id, {
-      label: name.trim(),
-      href: normalizeUrl(url),
+      label: name.trim() || href,
+      href,
       icon,
       pinned,
       category: category.trim() || t("common.uncategorized"),
@@ -104,8 +105,8 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
             <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("common.icon")}</label>
             <div className="flex gap-2 flex-wrap">
               {ICON_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" onClick={() => setIcon(opt.value)} className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${icon === opt.value ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900" : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-white/10"}`}>
-                  {t(opt.labelKey)}
+                <button key={opt.value} type="button" onClick={() => setIcon(opt.value)} className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors cursor-pointer ${icon === opt.value ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900" : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-white/10"}`}>
+                  <opt.icon className="size-4" />
                 </button>
               ))}
             </div>
