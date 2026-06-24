@@ -64,10 +64,9 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
-    const href = normalizeUrl(url);
     onSave(bookmark.id, {
-      label: name.trim() || href,
-      href,
+      label: name.trim(),
+      href: normalizeUrl(url),
       icon,
       pinned,
       category: category.trim() || t("common.uncategorized"),
