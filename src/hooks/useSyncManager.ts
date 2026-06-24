@@ -24,10 +24,6 @@ export interface WebDAVConfig {
 const DEFAULTS: Bookmark[] = [
   { id: "github", label: "GitHub", href: "https://github.com", icon: "github", pinned: true, category: "DevTools" },
   { id: "vercel", label: "Vercel", href: "https://vercel.com", icon: "globe", pinned: true, category: "DevTools" },
-  { id: "1panel", label: "1Panel", href: "http://localhost:8080", icon: "server", pinned: true, category: "Servers" },
-  { id: "alist", label: "Alist", href: "http://localhost:5244", icon: "drive", pinned: true, category: "Servers" },
-  { id: "vault", label: "Vaultwarden", href: "http://localhost:8080", icon: "shield", pinned: true, category: "Servers" },
-  { id: "docker", label: "Docker", href: "http://localhost:9000", icon: "box", pinned: true, category: "Servers" },
 ];
 
 function loadBookmarks(): Bookmark[] {
