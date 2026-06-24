@@ -254,21 +254,21 @@ export function SettingsDialog({
       {open && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden transition-colors duration-300">
-            <div className="flex items-center justify-between p-6 pb-4">
+          <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md mx-4 transition-colors duration-300 flex flex-col max-h-[85vh] overflow-hidden">
+            <div className="flex items-center justify-between px-4 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-4 shrink-0">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t("settings.title")}</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{t("settings.description")}</p>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
               >
                 <X className="size-4" />
               </button>
             </div>
 
-            <div className="px-6">
+            <div className="px-4 sm:px-6 shrink-0">
               <div className="flex bg-gray-100 dark:bg-slate-800 rounded-lg p-1">
                 <button
                   onClick={() => setTab("webdav")}
@@ -297,28 +297,28 @@ export function SettingsDialog({
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="overflow-y-auto p-4 sm:p-6 space-y-4">
               {tab === "webdav" ? (
                 <>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.server_url")}</label>
-                    <input value={server} onChange={(e) => setServer(e.target.value)} placeholder={t("settings.server_placeholder")} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+                    <input value={server} onChange={(e) => setServer(e.target.value)} placeholder={t("settings.server_placeholder")} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.username")}</label>
-                    <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder={t("settings.username_placeholder")} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+                    <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder={t("settings.username_placeholder")} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.password")}</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••" className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••" className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
-                  <button onClick={handleSave} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer">{t("settings.save_credentials")}</button>
+                  <button onClick={handleSave} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer">{t("settings.save_credentials")}</button>
                   <div className="flex gap-2">
-                    <button onClick={onPull} disabled={syncing} className="flex-1 h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
+                    <button onClick={onPull} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
                       {syncing ? <Loader2 className="size-4 animate-spin" /> : <Cloud className="size-4" />}
                       {t("settings.pull")}
                     </button>
-                    <button onClick={onPush} disabled={syncing} className="flex-1 h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
+                    <button onClick={onPush} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
                       {syncing ? <Loader2 className="size-4 animate-spin" /> : <Cloud className="size-4" />}
                       {t("settings.push")}
                     </button>
@@ -327,7 +327,7 @@ export function SettingsDialog({
                 </>
               ) : tab === "local" ? (
                 <>
-                  <button onClick={onExport} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer flex items-center justify-center gap-1">
+                  <button onClick={onExport} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer flex items-center justify-center gap-1">
                     <Download className="size-4" /> {t("settings.export_json")}
                   </button>
                   <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) onImport(f); }} />
@@ -444,7 +444,7 @@ export function SettingsDialog({
                         value={bgConfig.customUrl}
                         onChange={(e) => onUpdateBg({ customUrl: e.target.value })}
                         placeholder="https://example.com/image.jpg"
-                        className="mt-2 w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring"
+                        className="mt-2 w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring"
                       />
                     )}
                     <input
