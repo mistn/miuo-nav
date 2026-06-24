@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Cloud, Download, Upload, Loader2, Settings, X, Languages, Eye, EyeOff, Image as ImageIcon, Link, FileUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { WebDAVConfig } from "@/hooks/useSyncManager";
@@ -21,6 +21,55 @@ interface SettingsDialogProps {
   bgConfig: BgConfig;
   onUpdateBg: (patch: Partial<BgConfig>) => void;
   onUploadBg: (file: File) => void;
+}
+
+function CitySearch({ apiKey, city, cityCode, onUpdate }: {
+  apiKey: string; city: string; cityCode: string;
+  onUpdate: (loc: WeatherLocation) => void;
+}) {
+  const { t } = useTranslation();
+  const [searching, setSearching] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>(null!);
+
+  const lookup = useCallback(async (name: string) => {
+    if (!apiKey || !name.trim()) return;
+    setSearching(true);
+    try {
+      const res = await fetch(`/api/amap/config/district?keywords=${encodeURIComponent(name)}&subdistrict=0&key=${apiKey}`);
+      const data = await res.json();
+      if (data.status === "1" && data.districts?.[0]?.adcode) {
+        onUpdate({ apiKey, city: name, cityCode: data.districts[0].adcode });
+      }
+    } catch { /* silent */ }
+    setSearching(false);
+  }, [apiKey, onUpdate]);
+
+  const handleCityChange = (val: string) => {
+    onUpdate({ apiKey, city: val, cityCode });
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => lookup(val), 600);
+  };
+
+  return (
+    <div className="flex gap-2 items-end">
+      <div className="flex-1">
+        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
+        <input value={city} onChange={(e) => handleCityChange(e.target.value)}
+          placeholder="例如 Shanghai 或 上海"
+          className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1"
+        />
+      </div>
+      <div className="flex-1">
+        <label className="text-xs text-gray-500 dark:text-gray-400">City Code</label>
+        <div className="flex items-center gap-1 mt-1">
+          <input value={cityCode} readOnly
+            className="flex-1 h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700 px-2 text-xs text-gray-500 dark:text-gray-400 outline-none"
+          />
+          {searching && <Loader2 className="size-3 animate-spin text-gray-400 shrink-0" />}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function translateMsg(t: (key: string, opts?: Record<string, string>) => string, msg: string): string {
@@ -197,19 +246,17 @@ export function SettingsDialog({
                     </button>
                   </div>
                   {showWeather && (
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="space-y-2">
                       <div>
                         <label className="text-xs text-gray-500 dark:text-gray-400">API Key</label>
-                        <input value={weatherLoc.apiKey} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, apiKey: e.target.value })} placeholder="高德 API Key" className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                        <input value={weatherLoc.apiKey} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, apiKey: e.target.value })} placeholder="高德开放平台 → 应用管理 → Key" className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
                       </div>
-                      <div>
-                        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
-                        <input value={weatherLoc.city} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, city: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-500 dark:text-gray-400">City Code</label>
-                        <input value={weatherLoc.cityCode} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, cityCode: e.target.value })} placeholder="310000" className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
-                      </div>
+                      <CitySearch
+                        apiKey={weatherLoc.apiKey}
+                        city={weatherLoc.city}
+                        cityCode={weatherLoc.cityCode}
+                        onUpdate={onUpdateWeatherLoc}
+                      />
                     </div>
                   )}
 

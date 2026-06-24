@@ -1,84 +1,78 @@
 # Miuo Nav
 
-极简浏览器起始页 / 仪表盘。
+> [中文文档](README.md)
 
-- 多引擎搜索（Google、DuckDuckGo、Bing、百度、GitHub）
-- 书签管理：拖拽排序、分类、编辑/删除、WebDAV 云同步
-- 实时时钟 + 天气（Open-Meteo，无需 API Key）
-- 亮色/暗色主题、中英文切换、自定义背景图
-- 侧边栏：手风琴式分类分组
-- 所有数据存储在 localStorage（支持 JSON 导入导出）
+A polished, minimalist browser start page / dashboard.
 
-## 功能一览
+- Multi-engine search (Google, DuckDuckGo, Bing, Baidu, GitHub)
+- Bookmarks with drag-reorder, categories, edit/delete, WebDAV cloud sync
+- Real-time clock + weather (Amap Weather API)
+- Dark/light theme, i18n (中文 / English), background image
+- Floating sidebar with accordion category groups
+- All data stored in localStorage (export/import via JSON)
 
-| 功能 | 说明 |
-|------|------|
-| **搜索** | Ctrl+K 快速聚焦，5 种搜索引擎，Favicon 图标 |
-| **书签** | 固定到首页、右键编辑/删除、拖拽排序 |
-| **分类** | 按归类分组，侧边栏手风琴折叠 |
-| **天气** | 自动拉取 Open-Meteo，可在设置中关闭 |
-| **背景** | 必应每日 / 自定义图片链接 / 本地上传 |
-| **WebDAV 同步** | 推送到任意 WebDAV 服务器 |
-| **多语言** | 自动识别浏览器语言，设置内切换 |
-| **主题** | 亮色/暗色一键切换 |
+## Features
 
-## 部署到 Vercel
+| Feature | Description |
+|---------|-------------|
+| **Search** | Ctrl+K focus, 5 search engines, favicon indicators |
+| **Bookmarks** | Pin to homepage, right-click edit/delete, drag to reorder |
+| **Categories** | Group bookmarks, accordion sidebar |
+| **Weather** | Auto-lookup city code, toggleable |
+| **Background** | Bing daily / custom URL / local upload |
+| **WebDAV Sync** | Push/pull bookmarks to any WebDAV server |
+| **i18n** | Auto-detect browser language, switch in settings |
+| **Theme** | Light/dark toggle |
 
-1. 推送到 GitHub
-2. 打开 [vercel.com](https://vercel.com) → 添加新项目
-3. 导入 `miuo-nav` 仓库
-4. **构建命令**: `pnpm build`
-5. **输出目录**: `dist`
-6. 点击 **Deploy**
+## Deploy to Vercel
 
-或用 CLI：
+1. Push to GitHub
+2. Go to [vercel.com](https://vercel.com) → Add New Project
+3. Import `miuo-nav` repo
+4. **Build Command**: `pnpm build`
+5. **Output Directory**: `dist`
+6. Click **Deploy**
 
-```
-npm i -g vercel
-vercel --prod
-```
+The app is fully static (no server runtime), so it also works with Cloudflare Pages, Netlify, or any static host.
 
-项目为纯静态前端，也可部署到 Cloudflare Pages、Netlify 等平台。
+## API Configuration
 
-## API 配置说明
+### Weather
 
-### 天气
+Uses [Amap (高德地图) Weather API](https://lbs.amap.com/api/webservice/guide/api/weatherinfo).
 
-使用 [高德天气 API](https://lbs.amap.com/api/webservice/guide/api/weatherinfo)。
+1. Go to [高德开放平台](https://lbs.amap.com/) → 应用管理 → 创建应用 → 添加 Key (Web 服务)
+2. In Settings → Preferences → enable Weather → fill in **API Key** and **City Name** (Chinese or English). The city code is auto-looked up.
+3. If auto-lookup fails, you can also enter the city code manually.
 
-1. 去[高德开放平台](https://lbs.amap.com/) → 应用管理 → 创建应用 → 添加 Key（Web 服务类型）
-2. 设置 → 偏好 → 开启天气 → 填入 **API Key**、**城市代码**（如上海 `310000`）、**城市名称**
+The API is proxied through Vite (dev) or Vercel rewrites (production) to avoid CORS — no extra config needed.
 
-城市代码表：[高德行政区划](https://lbs.amap.com/api/webservice/download)
+### Background Bing Daily
 
-API 请求通过 Vite（本地开发）或 Vercel（生产环境）代理转发，无需额外 CORS 配置。
-
-### 必应每日背景
-
-通过第三方代理 `bing.biturl.top` 获取必应每日图片，无需 API Key。如果代理不可用，可在设置中切换到"自定义链接"直接填写图片 URL。
+Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day. No API key needed. If the proxy is unreachable, switch to "Custom URL" in settings and enter an image URL directly.
 
 ### WebDAV
 
-| 字段 | 说明 |
-|------|------|
-| 服务器地址 | `https://dav.example.com` |
-| 用户名 | WebDAV 用户名 |
-| 密码 | WebDAV 密码 |
+| Field | Value |
+|-------|-------|
+| Server URL | `https://dav.example.com` |
+| Username | Your WebDAV username |
+| Password | Your WebDAV password |
 
-凭据保存在 localStorage，书签以 `miuo_nav_config.json` 文件名同步到服务端。
+Credentials saved to localStorage. Bookmarks are synced as `miuo_nav_config.json` on the server.
 
-## 技术栈
+## Tech Stack
 
 - **Vite** + **React 19** + **TypeScript**
-- **Tailwind CSS v4**（class 式暗色模式）
-- **shadcn/ui**（Radix 原语组件）
+- **Tailwind CSS v4** (class-based dark mode)
+- **shadcn/ui** (Radix primitives)
 - **i18next** + **react-i18next**
-- **webdav**（前端 WebDAV 客户端）
+- **webdav** (frontend WebDAV client)
 
-## 本地开发
+## Local Development
 
 ```
 pnpm install
 pnpm dev      # http://localhost:5173
-pnpm build    # 输出到 dist/
+pnpm build    # outputs to dist/
 ```
