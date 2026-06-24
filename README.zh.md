@@ -44,11 +44,14 @@ vercel --prod
 
 ### 天气
 
-使用 [Open-Meteo](https://open-meteo.com/) — **无需 API Key**。默认定位石家庄（38.0422, 114.5086）。如需更改坐标，编辑 `src/components/WeatherWidget.tsx`：
+使用 [高德天气 API](https://lbs.amap.com/api/webservice/guide/api/weatherinfo)。
 
-```
-latitude=38.0422&longitude=114.5086
-```
+1. 去[高德开放平台](https://lbs.amap.com/) → 应用管理 → 创建应用 → 添加 Key（Web 服务类型）
+2. 设置 → 偏好 → 开启天气 → 填入 **API Key**、**城市代码**（如上海 `310000`）、**城市名称**
+
+城市代码表：[高德行政区划](https://lbs.amap.com/api/webservice/download)
+
+API 请求通过 Vite（本地开发）或 Vercel（生产环境）代理转发，无需额外 CORS 配置。
 
 ### 必应每日背景
 

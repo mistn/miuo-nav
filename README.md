@@ -47,13 +47,14 @@ The app is fully static (no server runtime), so it also works with Cloudflare Pa
 
 ### Weather
 
-Uses [Open-Meteo](https://open-meteo.com/) — **no API key required**. Location is hardcoded to Shijiazhuang (38.0422, 114.5086). To change:
+Uses [Amap (高德地图) Weather API](https://lbs.amap.com/api/webservice/guide/api/weatherinfo).
 
-Edit `src/components/WeatherWidget.tsx`:
+1. Go to [高德开放平台](https://lbs.amap.com/) → 应用管理 → 创建应用 → 添加 Key (Web 服务)
+2. In Settings → Preferences → enable Weather → fill in **API Key**, **City Code** (e.g. `310000` for Shanghai), and **City Name**
 
-```
-latitude=38.0422&longitude=114.5086
-```
+City code reference: [高德行政区划](https://lbs.amap.com/api/webservice/download)
+
+The API is proxied through Vite (dev) or Vercel rewrites (production) to avoid CORS — no extra config needed.
 
 ### Background Bing Daily
 

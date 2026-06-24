@@ -25,7 +25,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
         setIsLoading(true);
         setIsError(false);
         const response = await fetch(
-          `https://restapi.amap.com/v3/weather/weatherInfo?key=${apiKey}&city=${cityCode}&extensions=base`,
+          `/api/weather?key=${apiKey}&city=${cityCode}&extensions=base`,
           { signal: controller.signal }
         );
         if (!response.ok) throw new Error(`HTTP ${response.status}`);

@@ -11,4 +11,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/api/weather": {
+        target: "https://restapi.amap.com/v3/weather/weatherInfo",
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/api\/weather/, ""),
+      },
+    },
+  },
 })
