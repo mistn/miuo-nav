@@ -1,7 +1,9 @@
 export default async function handler(req, res) {
   const { url, method, body, auth } = req.body;
-  const headers = { Authorization: auth || "", "Content-Type": "application/octet-stream" };
-  const doFetch = async () => fetch(url, { method: method || "GET", headers, body: body || undefined });
+  const up = (method || "GET").toUpperCase();
+  const headers = { Authorization: auth || "" };
+  if (up !== "GET" && up !== "HEAD") headers["Content-Type"] = "application/octet-stream";
+  const doFetch = async () => fetch(url, { method: up, headers, body: up === "GET" || up === "HEAD" ? undefined : (body || undefined) });
 
   try {
     let resp = await doFetch();

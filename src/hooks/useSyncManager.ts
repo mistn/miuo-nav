@@ -160,7 +160,7 @@ export function useSyncManager() {
       const fullUrl = REMOTE_FILE.startsWith("/") ? `${baseUrl}${REMOTE_FILE}` : `${baseUrl}/${REMOTE_FILE}`;
       const result = await webdavReq(webdavConfig.server, auth, "GET", REMOTE_FILE);
       if (result.status === 404) { setSyncMsg(`settings.no_remote||${fullUrl}`); setSyncing(false); return; }
-      if (result.status >= 400) throw new Error(`HTTP ${result.status}\n${fullUrl}`);
+      if (result.status >= 400) throw new Error(`HTTP ${result.status}\n${fullUrl}\n${result.body}`);
       const data = JSON.parse(result.body);
       restoreConfig(data);
       setBookmarks(loadBookmarks());
