@@ -74,12 +74,6 @@ Recommended WebDAV providers:
 | Username | Your Nutstore email |
 | Password | App password (Nutstore → Account → Security → Generate App Password) |
 
-**Infini-Cloud** — Japan-based, 20GB free
-| Field | Value |
-|-------|-------|
-| Server URL | Your personal WebDAV URL (`https://xxxx.teracloud.jp/dav/`, see [My Page](https://infini-cloud.net/en/modules/mypage/)) |
-| Username | Your User ID (see My Page) |
-| Password | Apps Password (My Page → Turn on Apps Connection → generate, NOT your login password) |
 
 ## Tech Stack
 
