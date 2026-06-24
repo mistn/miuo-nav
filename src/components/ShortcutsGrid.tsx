@@ -158,13 +158,21 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
             >
               <ContextMenu>
                 <ContextMenuTrigger asChild>
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm border border-gray-100/80 dark:border-slate-700/80 transition-all duration-200 hover:shadow-md hover:scale-105 cursor-grab active:cursor-grabbing">
-                    {domain ? (
-                      <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
-                    ) : (
-                      <Icon className="size-5 text-gray-600 dark:text-gray-400" />
-                    )}
-                  </div>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm border border-gray-100/80 dark:border-slate-700/80 transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer">
+                      {domain ? (
+                        <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
+                      ) : (
+                        <Icon className="size-5 text-gray-600 dark:text-gray-400" />
+                      )}
+                    </div>
+                  </a>
                 </ContextMenuTrigger>
                 <a
                   href={item.href}
