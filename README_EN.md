@@ -6,10 +6,10 @@ A polished, minimalist browser start page / dashboard.
 
 - Multi-engine search (Google, DuckDuckGo, Bing, Baidu, GitHub)
 - Bookmarks with drag-reorder, categories, edit/delete, WebDAV cloud sync
-- Real-time clock + weather (Amap Weather API)
+- Real-time clock + weather (Amap API, auto-detect city/district)
 - Dark/light theme, i18n (中文 / English), background image
-- Floating sidebar with accordion category groups
-- All data stored in localStorage (export/import via JSON)
+- Sidebar with accordion category groups
+- All data in localStorage (export/import with full settings)
 
 ## Features
 
@@ -18,11 +18,12 @@ A polished, minimalist browser start page / dashboard.
 | **Search** | Ctrl+K focus, 5 search engines, favicon indicators |
 | **Bookmarks** | Pin to homepage, right-click edit/delete, drag to reorder |
 | **Categories** | Group bookmarks, accordion sidebar |
-| **Weather** | Auto-lookup city code, toggleable |
+| **Weather** | Amap API, browser geolocation + IP fallback, district-level |
 | **Background** | Bing daily / custom URL / local upload |
-| **WebDAV Sync** | Push/pull bookmarks to any WebDAV server |
+| **WebDAV Sync** | Push/pull to any WebDAV server (full config included) |
 | **i18n** | Auto-detect browser language, switch in settings |
 | **Theme** | Light/dark toggle |
+| **Import/Export** | JSON file with drag-and-drop, includes all settings |
 
 ## Deploy to Vercel
 
@@ -33,7 +34,7 @@ A polished, minimalist browser start page / dashboard.
 5. **Output Directory**: `dist`
 6. Click **Deploy**
 
-The app is fully static (no server runtime), so it also works with Cloudflare Pages, Netlify, or any static host.
+The app is fully static, so it also works with Cloudflare Pages, Netlify, or any static host.
 
 ## API Configuration
 
@@ -42,14 +43,15 @@ The app is fully static (no server runtime), so it also works with Cloudflare Pa
 Uses [Amap (高德地图) Weather API](https://lbs.amap.com/api/webservice/guide/api/weatherinfo).
 
 1. Go to [高德开放平台](https://lbs.amap.com/) → 应用管理 → 创建应用 → 添加 Key (Web 服务)
-2. In Settings → Preferences → enable Weather → fill in **API Key** and **City Name** (Chinese or English). The city code is auto-looked up.
-3. If auto-lookup fails, you can also enter the city code manually.
+2. In Settings → Preferences → enable Weather → fill in **API Key**
+3. Click **Auto Detect** → browser geolocation with IP fallback, down to district level
+4. If inaccurate, search manually by city or district name (e.g. "裕华区")
 
-The API is proxied through Vite (dev) or Vercel rewrites (production) to avoid CORS — no extra config needed.
+The API is proxied through Vite (dev) or Vercel rewrites (production) — no CORS config needed.
 
 ### Background Bing Daily
 
-Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day. No API key needed. If the proxy is unreachable, switch to "Custom URL" in settings and enter an image URL directly.
+Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day. No API key needed. If the proxy is unreachable, switch to "Custom URL" in settings.
 
 ### WebDAV
 
@@ -59,7 +61,7 @@ Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day.
 | Username | Your WebDAV username |
 | Password | Your WebDAV password |
 
-Credentials saved to localStorage. Bookmarks are synced as `miuo_nav_config.json` on the server.
+Synced as `miuo_nav_config.json`, includes bookmarks, weather, background, theme, language.
 
 ## Tech Stack
 
