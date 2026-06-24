@@ -11,11 +11,28 @@ import { useSyncManager } from "@/hooks/useSyncManager";
 import { useTheme } from "@/hooks/useTheme";
 import { useBackground } from "@/hooks/useBackground";
 
+export interface WeatherLocation {
+  lat: string;
+  lon: string;
+  city: string;
+}
+
+const DEFAULT_WEATHER: WeatherLocation = { lat: "31.2304", lon: "121.4737", city: "Shanghai" };
+
+function loadWeatherLocation(): WeatherLocation {
+  try {
+    const raw = localStorage.getItem("navidash-weatherLoc");
+    if (raw) return JSON.parse(raw);
+  } catch { /* ignore */ }
+  return DEFAULT_WEATHER;
+}
+
 function AppContent() {
   const [showWeather, setShowWeather] = useState(() => {
     const saved = localStorage.getItem("navidash-showWeather");
     return saved === null ? true : saved === "true";
   });
+  const [weatherLoc, setWeatherLoc] = useState<WeatherLocation>(loadWeatherLocation);
   const { theme, toggleTheme } = useTheme();
   const { config: bgConfig, updateConfig: onUpdateBg, bgUrl, handleUpload: onUploadBg } = useBackground();
 
@@ -36,6 +53,10 @@ function AppContent() {
     localStorage.setItem("navidash-showWeather", String(showWeather));
   }, [showWeather]);
 
+  useEffect(() => {
+    localStorage.setItem("navidash-weatherLoc", JSON.stringify(weatherLoc));
+  }, [weatherLoc]);
+
   const bgActive = bgConfig.enabled && bgUrl;
 
   return (
@@ -50,7 +71,7 @@ function AppContent() {
           </div>
 
           <div className="flex items-center gap-4">
-            {showWeather && <WeatherWidget />}
+            {showWeather && <WeatherWidget lat={weatherLoc.lat} lon={weatherLoc.lon} city={weatherLoc.city} />}
             <TimeWidget />
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <SettingsDialog
@@ -64,6 +85,8 @@ function AppContent() {
               onImport={importJSON}
               showWeather={showWeather}
               onToggleWeather={() => setShowWeather((v) => !v)}
+              weatherLoc={weatherLoc}
+              onUpdateWeatherLoc={setWeatherLoc}
               bgConfig={bgConfig}
               onUpdateBg={onUpdateBg}
               onUploadBg={onUploadBg}

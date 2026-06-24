@@ -3,6 +3,7 @@ import { Cloud, Download, Upload, Loader2, Settings, X, Languages, Eye, EyeOff, 
 import { useTranslation } from "react-i18next";
 import type { WebDAVConfig } from "@/hooks/useSyncManager";
 import type { BgConfig } from "@/hooks/useBackground";
+import type { WeatherLocation } from "@/App";
 
 interface SettingsDialogProps {
   webdavConfig: WebDAVConfig | null;
@@ -15,6 +16,8 @@ interface SettingsDialogProps {
   onImport: (file: File) => void;
   showWeather: boolean;
   onToggleWeather: () => void;
+  weatherLoc: WeatherLocation;
+  onUpdateWeatherLoc: (loc: WeatherLocation) => void;
   bgConfig: BgConfig;
   onUpdateBg: (patch: Partial<BgConfig>) => void;
   onUploadBg: (file: File) => void;
@@ -34,6 +37,7 @@ export function SettingsDialog({
   webdavConfig, onSaveWebDAV,
   onPush, onPull, syncing, syncMsg, onExport, onImport,
   showWeather, onToggleWeather,
+  weatherLoc, onUpdateWeatherLoc,
   bgConfig, onUpdateBg, onUploadBg,
 }: SettingsDialogProps) {
   const { t, i18n } = useTranslation();
@@ -192,6 +196,22 @@ export function SettingsDialog({
                       {showWeather ? "Hide" : "Show"}
                     </button>
                   </div>
+                  {showWeather && (
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_lat")}</label>
+                        <input value={weatherLoc.lat} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, lat: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_lon")}</label>
+                        <input value={weatherLoc.lon} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, lon: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
+                        <input value={weatherLoc.city} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, city: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                      </div>
+                    </div>
+                  )}
 
                   <div className="border-t border-gray-100 dark:border-slate-800 pt-4">
                     <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 mb-3">

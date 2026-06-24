@@ -7,7 +7,13 @@ interface WeatherData {
   description: string;
 }
 
-export function WeatherWidget() {
+interface WeatherWidgetProps {
+  lat: string;
+  lon: string;
+  city: string;
+}
+
+export function WeatherWidget({ lat, lon, city }: WeatherWidgetProps) {
   const { t } = useTranslation();
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +36,7 @@ export function WeatherWidget() {
         setIsLoading(true);
         setIsError(false);
         const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=38.0422&longitude=114.5086&current=temperature_2m,weather_code`,
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`,
           { signal: controller.signal }
         );
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -56,7 +62,7 @@ export function WeatherWidget() {
     fetchWeather();
     return () => { controller.abort(); clearTimeout(timeoutId); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lat, lon]);
 
   if (isLoading) {
     return (
@@ -80,7 +86,7 @@ export function WeatherWidget() {
     <div className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400">
       <CloudSun className="size-4" />
       <span>{weather.temperature}°</span>
-      <span className="text-slate-400 dark:text-slate-500">{t("weather.city")}</span>
+      <span className="text-slate-400 dark:text-slate-500">{city}</span>
     </div>
   );
 }
