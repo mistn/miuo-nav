@@ -26,6 +26,10 @@ const ICON_OPTIONS = [
   { value: "box", icon: Box },
 ];
 
+function stripProtocol(url: string): string {
+  return url.replace(/^https?:\/\//i, "");
+}
+
 function getDomain(href: string): string | null {
   try { return new URL(href).hostname; } catch { return null; }
 }
@@ -65,7 +69,7 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
     e.preventDefault();
     if (!url.trim()) return;
     onSave(bookmark.id, {
-      label: name.trim(),
+      label: name.trim() || stripProtocol(normalizeUrl(url)),
       href: normalizeUrl(url),
       icon,
       pinned,

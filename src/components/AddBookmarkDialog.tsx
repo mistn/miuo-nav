@@ -21,6 +21,10 @@ function normalizeUrl(url: string): string {
   return /^https?:\/\//i.test(s) ? s : `https://${s}`;
 }
 
+function stripProtocol(url: string): string {
+  return url.replace(/^https?:\/\//i, "");
+}
+
 export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -33,7 +37,7 @@ export function AddBookmarkDialog({ onAdd }: AddBookmarkDialogProps) {
     e.preventDefault();
     if (!url.trim()) return;
     onAdd({
-      label: name.trim(),
+      label: name.trim() || stripProtocol(normalizeUrl(url)),
       href: normalizeUrl(url),
       icon,
       pinned,
