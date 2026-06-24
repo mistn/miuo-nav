@@ -47,15 +47,35 @@ function CitySearch({ apiKey, city, cityCode, onUpdate }: {
   const searchLocations = async (name: string) => {
     if (!apiKey || !name.trim()) { setSuggestions([]); return; }
     setSearching(true);
+    const results: {name: string; adcode: string; level: string}[] = [];
     try {
       const res = await fetch(`/api/amap/config/district?keywords=${encodeURIComponent(name)}&subdistrict=0&key=${apiKey}`);
       const data = await res.json();
       if (data.status === "1" && data.districts) {
-        const list = data.districts.filter((d: any) => d.level === "city" || d.level === "district");
-        setSuggestions(list.map((d: any) => ({ name: d.name, adcode: d.adcode, level: d.level })));
-        setShowDropdown(list.length > 0);
+        for (const d of data.districts) {
+          if (d.level === "city" || d.level === "district")
+            results.push({ name: d.name, adcode: d.adcode, level: d.level });
+        }
+        // Query like "石家庄市裕华区" → only returns city, not district
+        const hasDistrict = results.some(r => r.level === "district");
+        if (!hasDistrict && /市.+[区县]/.test(name)) {
+          const m = name.match(/市(.+[区县])/);
+          if (m) {
+            const dRes = await fetch(`/api/amap/config/district?keywords=${encodeURIComponent(m[1])}&subdistrict=0&key=${apiKey}`);
+            const dData = await dRes.json();
+            if (dData.status === "1" && dData.districts) {
+              const city = results.find(r => r.level === "city");
+              for (const d of dData.districts) {
+                if (d.level === "district" && !results.some(r => r.adcode === d.adcode))
+                  results.push({ name: city ? `${city.name} ${d.name}` : d.name, adcode: d.adcode, level: d.level });
+              }
+            }
+          }
+        }
       }
     } catch { /* silent */ }
+    setSuggestions(results);
+    setShowDropdown(results.length > 0);
     setSearching(false);
   };
 
