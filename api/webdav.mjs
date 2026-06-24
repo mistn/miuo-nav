@@ -1,3 +1,5 @@
+import https from "https";
+import { URL } from "url";
 import { createClient } from "webdav";
 
 function getAuthUserPass(auth) {
@@ -5,6 +7,30 @@ function getAuthUserPass(auth) {
   const decoded = Buffer.from(auth.slice(6), "base64").toString();
   const idx = decoded.indexOf(":");
   return { username: decoded.slice(0, idx), password: decoded.slice(idx + 1) };
+}
+
+function httpsRequest(urlStr, method, headers, body, redirects = 5) {
+  return new Promise((resolve, reject) => {
+    const u = new URL(urlStr);
+    const opts = {
+      hostname: u.hostname, port: u.port || 443, path: u.pathname + u.search,
+      method, headers: { ...headers, Host: u.hostname },
+      rejectUnauthorized: true,
+    };
+    const req = https.request(opts, (res) => {
+      if (redirects > 0 && res.statusCode >= 301 && res.statusCode <= 308 && res.headers.location) {
+        const loc = new URL(res.headers.location, urlStr).toString();
+        res.resume();
+        return resolve(httpsRequest(loc, method, headers, body, redirects - 1));
+      }
+      const chunks = [];
+      res.on("data", (c) => chunks.push(c));
+      res.on("end", () => resolve({ status: res.statusCode, body: Buffer.concat(chunks).toString() }));
+    });
+    req.on("error", reject);
+    if (body) req.write(body);
+    req.end();
+  });
 }
 
 export default async function handler(req, res) {
@@ -16,23 +42,30 @@ export default async function handler(req, res) {
   }
 
   // 兼容新旧两种前端格式
-  // 新: { server, path }  旧: { url } → fullUrl = baseUrl + path
   const u = url ? new URL(url) : null;
-  const baseUrl = srv || (u ? u.origin : "");
-  const remotePath = pth || (u ? u.pathname : "");
+  const baseUrl = (srv || (u ? u.origin : "")).replace(/\/+$/, "");
+  const remotePath = (pth || (u ? u.pathname : "")).replace(/^\/*/, "/");
+  const fullUrl = baseUrl + remotePath;
 
   if (!baseUrl || !remotePath) {
     return res.status(200).json({ status: 400, body: "Missing server/path or url" });
   }
 
-  const client = createClient(baseUrl, { username, password });
   const up = (method || "GET").toUpperCase();
 
-  try {
-    if (up === "GET") {
-      const data = await client.getFileContents(remotePath, { format: "text" });
-      return res.status(200).json({ status: 200, body: data });
+  // GET: 直接用 https.request 避免 webdav/node-fetch 潜在 header 问题
+  if (up === "GET") {
+    try {
+      const resp = await httpsRequest(fullUrl, "GET", { Authorization: auth });
+      return res.status(200).json({ status: resp.status, body: resp.body });
+    } catch (e) {
+      return res.status(200).json({ status: 502, body: String(e) });
     }
+  }
+
+  // PUT/MKCOL: 用 webdav 包（已有 MKCOL 重试逻辑）
+  try {
+    const client = createClient(baseUrl, { username, password });
 
     if (up === "PUT") {
       const doPut = async () => {
