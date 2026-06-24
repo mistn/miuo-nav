@@ -1,32 +1,84 @@
-# React + TypeScript + Vite
+# Miuo Nav
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A polished, minimalist browser start page / dashboard.
 
-Currently, two official plugins are available:
+- Multi-engine search (Google, DuckDuckGo, Bing, Baidu, GitHub)
+- Bookmarks with drag-reorder, categories, edit/delete, WebDAV cloud sync
+- Real-time clock + weather (Open-Meteo, no API key needed)
+- Dark/light theme, i18n (中文 / English), background image
+- Floating sidebar with accordion category groups
+- All data stored in localStorage (export/import via JSON)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+| Feature | Description |
+|---------|-------------|
+| **Search** | Ctrl+K focus, 5 search engines, favicon indicators |
+| **Bookmarks** | Pin to homepage, right-click edit/delete, drag to reorder |
+| **Categories** | Group bookmarks, accordion sidebar |
+| **Weather** | Auto-fetch Open-Meteo, toggleable |
+| **Background** | Bing daily / custom URL / local upload |
+| **WebDAV Sync** | Push/pull bookmarks to any WebDAV server |
+| **i18n** | Auto-detect browser language, switch in settings |
+| **Theme** | Light/dark toggle |
+| **Scratchpad** | Quick notes (removed in latest version) |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Deploy to Vercel
 
-## Expanding the Oxlint configuration
+1. Push to GitHub
+2. Go to [vercel.com](https://vercel.com) → Add New Project
+3. Import `miuo-nav` repo
+4. **Build Command**: `pnpm build`
+5. **Output Directory**: `dist`
+6. Click **Deploy**
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Or use CLI:
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```
+npm i -g vercel
+vercel --prod
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The app is fully static (no server runtime), so it also works with Cloudflare Pages, Netlify, or any static host.
+
+## API Configuration
+
+### Weather
+
+Uses [Open-Meteo](https://open-meteo.com/) — **no API key required**. Location is hardcoded to Shijiazhuang (38.0422, 114.5086). To change:
+
+Edit `src/components/WeatherWidget.tsx`:
+
+```
+latitude=38.0422&longitude=114.5086
+```
+
+### Background Bing Daily
+
+Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day. No API key needed. If the proxy is unreachable, switch to "Custom URL" in settings and enter an image URL directly.
+
+### WebDAV
+
+| Field | Value |
+|-------|-------|
+| Server URL | `https://dav.example.com` |
+| Username | Your WebDAV username |
+| Password | Your WebDAV password |
+
+Credentials saved to localStorage. Bookmarks are synced as `miuo_nav_config.json` on the server.
+
+## Tech Stack
+
+- **Vite** + **React 19** + **TypeScript**
+- **Tailwind CSS v4** (class-based dark mode)
+- **shadcn/ui** (Radix primitives)
+- **i18next** + **react-i18next**
+- **webdav** (frontend WebDAV client)
+
+## Local Development
+
+```
+pnpm install
+pnpm dev      # http://localhost:5173
+pnpm build    # outputs to dist/
+```
