@@ -2,6 +2,8 @@
 
 > [中文文档](README.md)
 
+![Preview](screenshots/preview.png)
+
 A polished, minimalist browser start page / dashboard.
 
 - Multi-engine search (Google, DuckDuckGo, Bing, Baidu, GitHub)
@@ -62,6 +64,10 @@ Uses a public proxy `bing.biturl.top` that redirects to Bing's image of the day.
 | Password | Your WebDAV password |
 
 Synced as `miuo_nav_config.json`, includes bookmarks, weather, background, theme, language.
+
+Recommended WebDAV providers:
+- [Nutstore (坚果云)](https://www.jianguoyun.com/) — free, China-friendly
+- [Infini-Cloud](https://infini.cloud/) — global, WebDAV supported
 
 ## Tech Stack
 
