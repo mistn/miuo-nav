@@ -71,30 +71,72 @@ function CitySearch({ apiKey, city, cityCode, onUpdate }: {
     setSuggestions([]);
   };
 
-  const detectLocation = async () => {
+  const [detectOk, setDetectOk] = useState(false);
+  const [detectMsg, setDetectMsg] = useState("");
+
+  const detectLocation = () => {
     if (!apiKey) return;
     setDetecting(true);
-    try {
-      const res = await fetch(`/api/amap/ip?key=${apiKey}`);
-      const data = await res.json();
-      if (data.status === "1" && data.adcode) {
-        const detail = await fetch(`/api/amap/config/district?keywords=${data.adcode}&subdistrict=0&key=${apiKey}`);
-        const dd = await detail.json();
-        const name = dd.districts?.[0]?.name || data.city || data.province || "";
-        if (name) onUpdate({ apiKey, city: name, cityCode: data.adcode });
-      }
-    } catch { /* silent */ }
-    setDetecting(false);
+    setDetectMsg("");
+    setDetectOk(false);
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const regeoRes = await fetch(
+            `/api/amap/geocode/regeo?location=${longitude},${latitude}&key=${apiKey}`
+          );
+          const regeoData = await regeoRes.json();
+          if (regeoData.status !== "1" || !regeoData.regeocode) throw new Error();
+
+          const comp = regeoData.regeocode.addressComponent;
+          const cityName = comp.city || comp.province || "";
+          const district = comp.district || "";
+
+          let targetCode = comp.adcode || "";
+          let displayName = cityName;
+
+          if (district) {
+            const dRes = await fetch(
+              `/api/amap/config/district?keywords=${encodeURIComponent(district)}&subdistrict=0&key=${apiKey}`
+            );
+            const dData = await dRes.json();
+            if (dData.status === "1" && dData.districts?.[0]?.adcode) {
+              targetCode = dData.districts[0].adcode;
+            }
+            displayName = `${cityName} ${district}`;
+          }
+
+          onUpdate({ apiKey, city: displayName, cityCode: targetCode });
+          setDetectMsg(`✓ ${displayName}`);
+          setDetectOk(true);
+        } catch {
+          setDetectMsg("定位失败，请手动搜索城市/区县");
+        }
+        setDetecting(false);
+      },
+      () => {
+        setDetecting(false);
+        setDetectMsg("定位失败（权限或超时），请手动搜索");
+      },
+      { enableHighAccuracy: false, timeout: 8000 }
+    );
   };
 
   return (
     <div className="space-y-2">
       <button onClick={detectLocation} disabled={!apiKey || detecting}
-        className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-600 disabled:opacity-40 cursor-pointer"
+        className={`flex items-center gap-1 text-xs cursor-pointer disabled:opacity-40 ${
+          detectOk ? "text-green-500 hover:text-green-600" : "text-blue-500 hover:text-blue-600"
+        }`}
       >
         {detecting ? <Loader2 className="size-3 animate-spin" /> : <MapPin className="size-3" />}
-        {detecting ? "检测中..." : "自动检测当前位置"}
+        {detecting ? "定位中..." : "自动检测当前位置"}
       </button>
+      {detectMsg && (
+        <p className={`text-xs ${detectOk ? "text-green-500" : "text-red-400"}`}>{detectMsg}</p>
+      )}
       <div ref={containerRef} className="relative">
         <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
         <input value={city} onChange={(e) => handleCityChange(e.target.value)}
