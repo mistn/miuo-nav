@@ -74,54 +74,69 @@ function CitySearch({ apiKey, city, cityCode, onUpdate }: {
   const [detectOk, setDetectOk] = useState(false);
   const [detectMsg, setDetectMsg] = useState("");
 
-  const detectLocation = () => {
+  const detectLocation = async () => {
     if (!apiKey) return;
     setDetecting(true);
     setDetectMsg("");
     setDetectOk(false);
 
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude } = pos.coords;
-        try {
-          const regeoRes = await fetch(
-            `/api/amap/geocode/regeo?location=${longitude},${latitude}&key=${apiKey}`
-          );
-          const regeoData = await regeoRes.json();
-          if (regeoData.status !== "1" || !regeoData.regeocode) throw new Error();
+    let lat: number | null = null;
+    let lon: number | null = null;
 
-          const comp = regeoData.regeocode.addressComponent;
-          const cityName = comp.city || comp.province || "";
-          const district = comp.district || "";
-
-          let targetCode = comp.adcode || "";
-          let displayName = cityName;
-
-          if (district) {
-            const dRes = await fetch(
-              `/api/amap/config/district?keywords=${encodeURIComponent(district)}&subdistrict=0&key=${apiKey}`
-            );
-            const dData = await dRes.json();
-            if (dData.status === "1" && dData.districts?.[0]?.adcode) {
-              targetCode = dData.districts[0].adcode;
-            }
-            displayName = `${cityName} ${district}`;
-          }
-
-          onUpdate({ apiKey, city: displayName, cityCode: targetCode });
-          setDetectMsg(`✓ ${displayName}`);
-          setDetectOk(true);
-        } catch {
-          setDetectMsg("定位失败，请手动搜索城市/区县");
+    // Tier 1: browser geolocation
+    try {
+      const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 6000 });
+      });
+      lat = pos.coords.latitude;
+      lon = pos.coords.longitude;
+    } catch {
+      // Tier 2: IP-based (ip-api.com supports CORS, no permission needed)
+      try {
+        const ipRes = await fetch("https://ip-api.com/json/");
+        const ipData = await ipRes.json();
+        if (ipData.status === "success") {
+          lat = ipData.lat;
+          lon = ipData.lon;
         }
-        setDetecting(false);
-      },
-      () => {
-        setDetecting(false);
-        setDetectMsg("定位失败（权限或超时），请手动搜索");
-      },
-      { enableHighAccuracy: false, timeout: 8000 }
-    );
+      } catch { /* both failed */ }
+    }
+
+    if (lat === null || lon === null) {
+      setDetectMsg("定位失败，请手动搜索城市/区县");
+      setDetecting(false);
+      return;
+    }
+
+    // Use Amap regeo for Chinese names & adcode
+    try {
+      const regeoRes = await fetch(`/api/amap/geocode/regeo?location=${lon},${lat}&key=${apiKey}`);
+      const regeoData = await regeoRes.json();
+      if (regeoData.status !== "1" || !regeoData.regeocode) throw new Error();
+
+      const comp = regeoData.regeocode.addressComponent;
+      const cityName = comp.city || comp.province || "";
+      const district = comp.district || "";
+
+      let targetCode = comp.adcode || "";
+      let displayName = cityName;
+
+      if (district) {
+        const dRes = await fetch(`/api/amap/config/district?keywords=${encodeURIComponent(district)}&subdistrict=0&key=${apiKey}`);
+        const dData = await dRes.json();
+        if (dData.status === "1" && dData.districts?.[0]?.adcode) {
+          targetCode = dData.districts[0].adcode;
+        }
+        displayName = `${cityName} ${district}`;
+      }
+
+      onUpdate({ apiKey, city: displayName, cityCode: targetCode });
+      setDetectMsg(`✓ ${displayName}`);
+      setDetectOk(true);
+    } catch {
+      setDetectMsg("定位失败，请手动搜索城市/区县");
+    }
+    setDetecting(false);
   };
 
   return (
