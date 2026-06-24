@@ -315,9 +315,8 @@ export function SettingsDialog({
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.password")}</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••" className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
-                  <button onClick={handleSave} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer relative">
-                    {t("settings.save_credentials")}
-                    {saved && <span className="absolute -top-2 right-0 text-[10px] text-green-500 font-medium">✓ {t("settings.saved")}</span>}
+                  <button onClick={handleSave} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer">
+                    {saved ? "✔ " + t("settings.saved") : t("settings.save_credentials")}
                   </button>
                   <div className="flex gap-2">
                     <button onClick={onPull} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
