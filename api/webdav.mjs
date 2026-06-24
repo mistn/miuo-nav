@@ -8,25 +8,35 @@ function getAuthUserPass(auth) {
 }
 
 export default async function handler(req, res) {
-  const { server, method, path, body, auth } = req.body;
+  const { server: srv, method, path: pth, body, auth, url } = req.body;
   const { username, password } = getAuthUserPass(auth);
 
   if (!username || !password) {
     return res.status(200).json({ status: 401, body: "Missing or invalid credentials" });
   }
 
-  const client = createClient(server, { username, password });
+  // 兼容新旧两种前端格式
+  // 新: { server, path }  旧: { url } → fullUrl = baseUrl + path
+  const u = url ? new URL(url) : null;
+  const baseUrl = srv || (u ? u.origin : "");
+  const remotePath = pth || (u ? u.pathname : "");
+
+  if (!baseUrl || !remotePath) {
+    return res.status(200).json({ status: 400, body: "Missing server/path or url" });
+  }
+
+  const client = createClient(baseUrl, { username, password });
   const up = (method || "GET").toUpperCase();
 
   try {
     if (up === "GET") {
-      const data = await client.getFileContents(path, { format: "text" });
+      const data = await client.getFileContents(remotePath, { format: "text" });
       return res.status(200).json({ status: 200, body: data });
     }
 
     if (up === "PUT") {
       const doPut = async () => {
-        await client.putFileContents(path, body || "", { overwrite: true, contentType: "application/json" });
+        await client.putFileContents(remotePath, body || "", { overwrite: true, contentType: "application/json" });
       };
       try {
         await doPut();
@@ -34,7 +44,7 @@ export default async function handler(req, res) {
       } catch (putErr) {
         const code = putErr.response?.status || putErr.status || 0;
         if (code === 404 || code === 409) {
-          const parent = path.replace(/\/+$/, "").split("/").slice(0, -1).join("/") || "/";
+          const parent = remotePath.replace(/\/+$/, "").split("/").slice(0, -1).join("/") || "/";
           try {
             await client.createDirectory(parent);
           } catch (mkErr) {
@@ -51,7 +61,7 @@ export default async function handler(req, res) {
     }
 
     if (up === "MKCOL") {
-      await client.createDirectory(path);
+      await client.createDirectory(remotePath);
       return res.status(200).json({ status: 201, body: "" });
     }
 
