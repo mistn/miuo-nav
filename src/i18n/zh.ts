@@ -86,6 +86,7 @@ export default {
     bg_custom: "自定义链接",
     bg_upload: "上传图片",
     bg_disable: "关闭",
+    bg_drag_drop: "拖拽图片到此处或点击上传",
   },
   shortcuts: {
     add_title: "添加快捷方式",

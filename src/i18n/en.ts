@@ -86,6 +86,7 @@ export default {
     bg_custom: "Custom URL",
     bg_upload: "Upload Image",
     bg_disable: "Disable",
+    bg_drag_drop: "Drop image here or click to upload",
   },
   shortcuts: {
     add_title: "Add Shortcut",

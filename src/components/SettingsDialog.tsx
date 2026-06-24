@@ -462,6 +462,15 @@ export function SettingsDialog({
                         if (f) onUploadBg(f);
                       }}
                     />
+                    <div
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) onUploadBg(f); }}
+                      onClick={() => bgFileRef.current?.click()}
+                      className="mt-2 w-full h-16 rounded-xl border-2 border-dashed border-gray-300 dark:border-white/10 text-xs text-gray-500 dark:text-zinc-400 hover:border-gray-400 dark:hover:border-white/20 hover:bg-gray-50 dark:hover:bg-white/[0.08] transition-colors cursor-pointer flex flex-col items-center justify-center gap-1"
+                    >
+                      <FileUp className="size-4" />
+                      <span>{t("settings.bg_drag_drop")}</span>
+                    </div>
                   </div>
                 </div>
               )}
