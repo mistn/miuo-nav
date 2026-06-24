@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { createClient, type WebDAVClient } from "webdav";
 
 const STORAGE_KEY = "navidash-bookmarks";
 const WEBDAV_CONFIG_KEY = "navidash-webdav";
 const REMOTE_FILE = "/miuo_nav_config.json";
+const PROXY = "/api/webdav";
 
 // Keys to include in sync/export (excludes webdav credentials)
 const CONFIG_KEYS = [
@@ -80,8 +80,14 @@ function saveWebDAVConfig(config: WebDAVConfig) {
   localStorage.setItem(WEBDAV_CONFIG_KEY, JSON.stringify(config));
 }
 
-function getClient(config: WebDAVConfig): WebDAVClient {
-  return createClient(config.server, { username: config.username, password: config.password });
+async function webdavReq(server: string, auth: string, method: string, path: string, body?: string): Promise<{ status: number; body: string }> {
+  const url = `${server.replace(/\/+$/, "")}${path}`;
+  const res = await fetch(PROXY, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, method, body: body || null, auth }),
+  });
+  return await res.json();
 }
 
 export function useSyncManager() {
@@ -130,9 +136,10 @@ export function useSyncManager() {
     if (!webdavConfig) { setSyncMsg("settings.no_webdav"); return; }
     setSyncing(true); setSyncMsg("");
     try {
-      const client = getClient(webdavConfig);
+      const auth = "Basic " + btoa(`${webdavConfig.username}:${webdavConfig.password}`);
       const data = JSON.stringify(collectConfig(), null, 2);
-      await client.putFileContents(REMOTE_FILE, data, { overwrite: true });
+      const result = await webdavReq(webdavConfig.server, auth, "PUT", REMOTE_FILE, data);
+      if (result.status >= 400) throw new Error(`HTTP ${result.status}`);
       setSyncMsg("settings.pushed");
     } catch (e) {
       setSyncMsg(`settings.push_failed||${e instanceof Error ? e.message : "unknown"}`);
@@ -143,11 +150,11 @@ export function useSyncManager() {
     if (!webdavConfig) { setSyncMsg("settings.no_webdav"); return; }
     setSyncing(true); setSyncMsg("");
     try {
-      const client = getClient(webdavConfig);
-      const exists = await client.exists(REMOTE_FILE);
-      if (!exists) { setSyncMsg("settings.no_remote"); setSyncing(false); return; }
-      const content = await client.getFileContents(REMOTE_FILE, { format: "text" }) as string;
-      const data = JSON.parse(content);
+      const auth = "Basic " + btoa(`${webdavConfig.username}:${webdavConfig.password}`);
+      const result = await webdavReq(webdavConfig.server, auth, "GET", REMOTE_FILE);
+      if (result.status === 404) { setSyncMsg("settings.no_remote"); setSyncing(false); return; }
+      if (result.status >= 400) throw new Error(`HTTP ${result.status}`);
+      const data = JSON.parse(result.body);
       restoreConfig(data);
       setBookmarks(loadBookmarks());
       setSyncMsg("settings.pulled");
