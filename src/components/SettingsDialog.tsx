@@ -269,10 +269,10 @@ export function SettingsDialog({
             </div>
 
             <div className="px-4 sm:px-6 shrink-0">
-              <div className="flex bg-gray-100 dark:bg-slate-800 rounded-lg p-0.5 sm:p-1">
+              <div className="flex bg-gray-100 dark:bg-slate-800 rounded-lg p-1">
                 <button
                   onClick={() => setTab("webdav")}
-                  className={`flex-1 py-1 sm:py-1.5 text-[11px] sm:text-sm rounded-md transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 text-sm rounded-md transition-all cursor-pointer ${
                     tab === "webdav" ? "bg-white dark:bg-slate-700 shadow-sm font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                   }`}
                 >
@@ -280,7 +280,7 @@ export function SettingsDialog({
                 </button>
                 <button
                   onClick={() => setTab("local")}
-                  className={`flex-1 py-1 sm:py-1.5 text-[11px] sm:text-sm rounded-md transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 text-sm rounded-md transition-all cursor-pointer ${
                     tab === "local" ? "bg-white dark:bg-slate-700 shadow-sm font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                   }`}
                 >
@@ -288,7 +288,7 @@ export function SettingsDialog({
                 </button>
                 <button
                   onClick={() => setTab("prefs")}
-                  className={`flex-1 py-1 sm:py-1.5 text-[11px] sm:text-sm rounded-md transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 text-sm rounded-md transition-all cursor-pointer ${
                     tab === "prefs" ? "bg-white dark:bg-slate-700 shadow-sm font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                   }`}
                 >
