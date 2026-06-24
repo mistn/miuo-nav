@@ -186,12 +186,12 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                     </div>
                   </a>
                 </ContextMenuTrigger>
-                {/* drop-shadow 确保文字在明/暗壁纸不同区域均有可读性，不受背景颜色干扰 */}
+                {/* text-shadow 用紧贴文字的微阴影取代 drop-shadow，保持清晰锐利，避免廉价模糊感 */}
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-slate-800 font-medium drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-center mt-2 shortcut-label"
+                  className="text-xs text-slate-900 font-medium [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)] text-center mt-2 shortcut-label"
                 >
                   {item.label}
                 </a>

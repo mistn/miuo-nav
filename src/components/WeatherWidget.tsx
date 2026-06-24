@@ -49,8 +49,8 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (!apiKey || !cityCode) {
     return (
-      /* drop-shadow 保证顶部栏文字在动态壁纸上始终可读，明暗模式分别用白色/黑色阴影 */
-      <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+      /* text-shadow 紧贴文字边缘提供精细对比，避免 drop-shadow 的模糊廉价感 */
+      <div className="flex items-center gap-1.5 text-sm text-slate-900 font-medium [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">
         <CloudOff className="size-4 header-icon" />
         <span className="header-text">{t("weather.offline")}</span>
       </div>
@@ -59,7 +59,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+      <div className="flex items-center gap-1.5 text-sm text-slate-900 font-medium [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">
         <CloudSun className="size-4 animate-pulse header-icon" />
         <span className="header-text">—°</span>
       </div>
@@ -68,7 +68,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
 
   if (isError || !weather) {
     return (
-      <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+      <div className="flex items-center gap-1.5 text-sm text-slate-900 font-medium [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">
         <CloudOff className="size-4 header-icon" />
         <span className="header-text">{t("weather.offline")}</span>
       </div>
@@ -76,7 +76,7 @@ export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   }
 
   return (
-    <div className="flex items-center gap-1.5 text-sm text-slate-800 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] dark:text-zinc-100 dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+    <div className="flex items-center gap-1.5 text-sm text-slate-900 font-medium [text-shadow:_0_1px_2px_rgb(255_255_255_/_80%)] dark:text-white dark:[text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">
       <CloudSun className="size-4 header-icon" />
       <span className="header-text">{weather.temperature}°</span>
       <span className="header-text">{city}</span>
