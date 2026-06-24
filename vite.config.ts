@@ -11,12 +11,17 @@ function webdavProxy(): Plugin {
         const chunks: Buffer[] = [];
         for await (const chunk of req) chunks.push(chunk);
         const { url, method, body, auth } = JSON.parse(Buffer.concat(chunks).toString());
+        const headers: Record<string, string> = { Authorization: auth || "", "Content-Type": "application/octet-stream" };
+        const doFetch = async () => fetch(url, { method: method || "GET", headers, body: body || undefined });
+
         try {
-          const resp = await fetch(url, {
-            method: method || "GET",
-            headers: { Authorization: auth || "", "Content-Type": "application/octet-stream" },
-            body: body || undefined,
-          });
+          let resp = await doFetch();
+          // PUT 404 → try MKCOL parent, then retry
+          if (method === "PUT" && resp.status === 404) {
+            const parentUrl = url.replace(/\/+$/, "").split("/").slice(0, -1).join("/");
+            const mk = await fetch(parentUrl, { method: "MKCOL", headers: { Authorization: auth || "" } });
+            if (mk.status < 400 || mk.status === 405) resp = await doFetch();
+          }
           res.statusCode = resp.status;
           res.setHeader("Content-Type", "application/json");
           res.end(JSON.stringify({ status: resp.status, body: await resp.text() }));
