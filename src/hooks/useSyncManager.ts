@@ -81,13 +81,15 @@ function saveWebDAVConfig(config: WebDAVConfig) {
 }
 
 async function webdavReq(server: string, auth: string, method: string, path: string, body?: string): Promise<{ status: number; body: string }> {
-  const url = `${server.replace(/\/+$/, "")}${path}`;
+  const baseUrl = server.replace(/\/+$/, "");
+  const url = path.startsWith("/") ? `${baseUrl}${path}` : `${baseUrl}/${path}`;
   const res = await fetch(PROXY, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url, method, body: body || null, auth }),
   });
-  return await res.json();
+  const result = await res.json();
+  return { status: result.status, body: typeof result.body === "string" ? result.body : String(result.body) };
 }
 
 export function useSyncManager() {
@@ -138,8 +140,10 @@ export function useSyncManager() {
     try {
       const auth = "Basic " + btoa(`${webdavConfig.username}:${webdavConfig.password}`);
       const data = JSON.stringify(collectConfig(), null, 2);
+      const baseUrl = webdavConfig.server.replace(/\/+$/, "");
+      const fullUrl = REMOTE_FILE.startsWith("/") ? `${baseUrl}${REMOTE_FILE}` : `${baseUrl}/${REMOTE_FILE}`;
       const result = await webdavReq(webdavConfig.server, auth, "PUT", REMOTE_FILE, data);
-      if (result.status >= 400) throw new Error(`HTTP ${result.status}`);
+      if (result.status >= 400) throw new Error(`HTTP ${result.status}\n${fullUrl}\n${result.body}`);
       setSyncMsg("settings.pushed");
     } catch (e) {
       setSyncMsg(`settings.push_failed||${e instanceof Error ? e.message : "unknown"}`);
@@ -151,9 +155,11 @@ export function useSyncManager() {
     setSyncing(true); setSyncMsg("");
     try {
       const auth = "Basic " + btoa(`${webdavConfig.username}:${webdavConfig.password}`);
+      const baseUrl = webdavConfig.server.replace(/\/+$/, "");
+      const fullUrl = REMOTE_FILE.startsWith("/") ? `${baseUrl}${REMOTE_FILE}` : `${baseUrl}/${REMOTE_FILE}`;
       const result = await webdavReq(webdavConfig.server, auth, "GET", REMOTE_FILE);
-      if (result.status === 404) { setSyncMsg("settings.no_remote"); setSyncing(false); return; }
-      if (result.status >= 400) throw new Error(`HTTP ${result.status}`);
+      if (result.status === 404) { setSyncMsg(`settings.no_remote||${fullUrl}`); setSyncing(false); return; }
+      if (result.status >= 400) throw new Error(`HTTP ${result.status}\n${fullUrl}`);
       const data = JSON.parse(result.body);
       restoreConfig(data);
       setBookmarks(loadBookmarks());

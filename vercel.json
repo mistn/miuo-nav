@@ -1,12 +1,13 @@
 {
+  "functions": {
+    "api/webdav.mjs": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
       "source": "/api/amap/:path*",
       "destination": "https://restapi.amap.com/v3/:path*"
-    },
-    {
-      "source": "/api/webdav",
-      "destination": "/api/webdav"
     }
   ]
 }

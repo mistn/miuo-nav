@@ -73,7 +73,7 @@ export default {
     no_webdav: "未配置 WebDAV",
     pushed: "上传成功",
     push_failed: "上传失败：{{msg}}",
-    no_remote: "未找到远程文件",
+    no_remote: "未找到远程文件：{{msg}}",
     pulled: "下载成功",
     pull_failed: "下载失败：{{msg}}",
     imported: "导入成功",

@@ -73,7 +73,7 @@ export default {
     no_webdav: "No WebDAV config",
     pushed: "Pushed successfully",
     push_failed: "Push failed: {{msg}}",
-    no_remote: "No remote file found",
+    no_remote: "No remote file found: {{msg}}",
     pulled: "Pulled successfully",
     pull_failed: "Pull failed: {{msg}}",
     imported: "Imported successfully",
