@@ -63,7 +63,7 @@ function AppContent() {
     <div className="relative min-h-screen">
       <BackgroundLayer url={bgUrl} enabled={bgConfig.enabled} />
       <div className={`relative z-10 flex flex-col min-h-screen transition-colors duration-300 ${
-        bgActive ? "bg-transparent bg-active" : "bg-slate-50 dark:bg-slate-950"
+        bgActive ? "bg-transparent bg-active" : "bg-slate-50 dark:bg-black"
       }`}>
         {/*
           背景图片激活时在顶部叠加一个半透明渐变，

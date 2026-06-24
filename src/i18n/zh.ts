@@ -100,6 +100,7 @@ export default {
     icon_drive: "硬盘",
     icon_shield: "盾牌",
     icon_box: "盒子",
+    custom_icon: "自定义图标名 (Lucide)",
   },
   theme: {
     switch_to: "切换到{{mode}}模式",

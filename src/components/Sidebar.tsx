@@ -58,7 +58,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer"
         aria-label={t("sidebar.open")}
       >
         <Menu className="size-4" />
@@ -67,11 +67,11 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
       {open && (
         <div className="fixed inset-0 z-[100]">
           <div className="absolute inset-0 bg-black/50 transition-opacity" onClick={() => setOpen(false)} />
-          <div className="absolute inset-y-0 left-0 w-[85vw] sm:w-80 bg-white dark:bg-slate-900 shadow-xl flex flex-col transition-colors duration-300">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-slate-800">
+          <div className="absolute inset-y-0 left-0 w-[85vw] sm:w-80 bg-white dark:bg-zinc-950 shadow-xl flex flex-col transition-colors duration-300">
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-white/10">
               <div>
-                <h2 className="font-semibold text-gray-900 dark:text-gray-100">{t("sidebar.title")}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <h2 className="font-semibold text-gray-900 dark:text-zinc-100">{t("sidebar.title")}</h2>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">
                   {t("sidebar.shortcuts_count", {
                     count: visible.length,
                     categories: Object.keys(grouped).length,
@@ -80,7 +80,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
               </div>
               <button
                 onClick={() => setOpen(false)}
-        className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer header-icon"
+        className="p-1.5 rounded-lg text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer header-icon"
                 aria-label={t("sidebar.close")}
               >
                 <X className="size-4" />
@@ -90,9 +90,9 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
             <div className="flex-1 overflow-y-auto p-4">
               <Accordion type="multiple" className="w-full">
                 {Object.entries(grouped).map(([category, items]) => (
-                  <AccordionItem key={category} value={category} className="border-b border-gray-100 dark:border-slate-800">
-                    <AccordionTrigger className="text-sm font-medium text-gray-700 dark:text-gray-300 py-3 hover:no-underline">
-                      <span>{category} <span className="text-gray-400 dark:text-gray-500 font-normal">({items.length})</span></span>
+                  <AccordionItem key={category} value={category} className="border-b border-gray-100 dark:border-white/10">
+                    <AccordionTrigger className="text-sm font-medium text-gray-700 dark:text-zinc-300 py-3 hover:no-underline">
+                      <span>{category} <span className="text-gray-400 dark:text-zinc-500 font-normal">({items.length})</span></span>
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="grid grid-cols-3 gap-3">
@@ -105,16 +105,16 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
                                 href={item.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                                className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/[0.08] transition-colors"
                               >
-                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700">
+                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10">
                                   {domain ? (
                                     <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
                                   ) : (
-                                    <Icon className="size-4 text-gray-600 dark:text-gray-400" />
+                                    <Icon className="size-4 text-gray-600 dark:text-zinc-400" />
                                   )}
                                 </div>
-                                <span className="text-xs text-gray-600 dark:text-gray-400 text-center leading-tight">{item.label}</span>
+                                <span className="text-xs text-gray-600 dark:text-zinc-400 text-center leading-tight">{item.label}</span>
                               </a>
                               <button
                                 onClick={(e) => {

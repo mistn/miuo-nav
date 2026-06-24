@@ -100,6 +100,7 @@ export default {
     icon_drive: "Drive",
     icon_shield: "Shield",
     icon_box: "Box",
+    custom_icon: "Custom icon name (Lucide)",
   },
   theme: {
     switch_to: "Switch to {{mode}} mode",

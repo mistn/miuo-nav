@@ -30,6 +30,12 @@ function getDomain(href: string): string | null {
   try { return new URL(href).hostname; } catch { return null; }
 }
 
+function normalizeUrl(url: string): string {
+  const s = url.trim();
+  if (!s) return s;
+  return /^https?:\/\//i.test(s) ? s : `https://${s}`;
+}
+
 interface EditDialogProps {
   bookmark: Bookmark | null;
   onSave: (id: string, data: Omit<Bookmark, "id">) => void;
@@ -60,7 +66,7 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
     if (!name.trim() || !url.trim()) return;
     onSave(bookmark.id, {
       label: name.trim(),
-      href: url.trim(),
+      href: normalizeUrl(url),
       icon,
       pinned,
       category: category.trim() || t("common.uncategorized"),
@@ -71,48 +77,49 @@ function EditBookmarkDialog({ bookmark, onSave, onClose }: EditDialogProps) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden transition-colors duration-300">
+      <div className="relative bg-white dark:bg-zinc-950 rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden transition-colors duration-300 border dark:border-white/10">
         <div className="flex items-center justify-between p-6 pb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t("shortcuts.edit_title")}</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{t("shortcuts.edit_description")}</p>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-100">{t("shortcuts.edit_title")}</h2>
+            <p className="text-sm text-gray-500 dark:text-zinc-400">{t("shortcuts.edit_description")}</p>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer">
             <X className="size-4" />
           </button>
         </div>
         <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("common.name")}</label>
-            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+            <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("common.name")}</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("common.url")}</label>
-            <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+            <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("common.url")}</label>
+            <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("common.category")}</label>
-            <input value={category} onChange={(e) => setCategory(e.target.value)} placeholder={t("common.uncategorized")} className="w-full h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+            <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("common.category")}</label>
+            <input value={category} onChange={(e) => setCategory(e.target.value)} placeholder={t("common.uncategorized")} className="w-full h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("common.icon")}</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("common.icon")}</label>
             <div className="flex gap-2 flex-wrap">
               {ICON_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" onClick={() => setIcon(opt.value)} className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${icon === opt.value ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900" : "bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700"}`}>
+                <button key={opt.value} type="button" onClick={() => setIcon(opt.value)} className={`px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${icon === opt.value ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900" : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-white/10}`}>
                   {t(opt.labelKey)}
                 </button>
               ))}
             </div>
+            <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t("shortcuts.custom_icon")} className="w-full h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-2 text-xs text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
           </div>
           <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300 cursor-pointer">
               <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} className="rounded" />
               {t("common.pin")}
             </label>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 h-9 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">{t("common.cancel")}</button>
-            <button type="submit" className="px-4 h-9 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors cursor-pointer">{t("common.save")}</button>
+            <button type="button" onClick={onClose} className="px-4 h-9 rounded-xl text-sm text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer">{t("common.cancel")}</button>
+            <button type="submit" className="px-4 h-9 rounded-xl bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 transition-colors cursor-pointer">{t("common.save")}</button>
           </div>
         </form>
       </div>
@@ -165,11 +172,11 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                     className="block"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm border border-gray-100/80 dark:border-slate-700/80 transition-all duration-200 hover:shadow-md hover:scale-105 cursor-pointer">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-white/[0.07] dark:backdrop-blur-xl shadow-sm border border-gray-100/80 dark:border-white/10 transition-all duration-200 hover:shadow-md hover:scale-105 dark:hover:bg-white/[0.12] cursor-pointer">
                       {domain ? (
                         <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`} alt="" className="w-5 h-5 rounded-full" />
                       ) : (
-                        <Icon className="size-5 text-gray-600 dark:text-gray-400" />
+                        <Icon className="size-5 text-gray-600 dark:text-zinc-400" />
                       )}
                     </div>
                   </a>
@@ -178,7 +185,7 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2 shortcut-label"
+                  className="text-xs text-gray-500 dark:text-zinc-400 text-center mt-2 shortcut-label"
                 >
                   {item.label}
                 </a>

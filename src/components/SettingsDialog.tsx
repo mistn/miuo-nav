@@ -166,18 +166,18 @@ function CitySearch({ apiKey, city, cityCode, onUpdate }: {
         <p className={`text-xs ${detectOk ? "text-green-500" : "text-red-400"}`}>{detectMsg}</p>
       )}
       <div ref={containerRef} className="relative">
-        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
+        <label className="text-xs text-gray-500 dark:text-zinc-400">{t("settings.weather_city")}</label>
         <input value={city} onChange={(e) => handleCityChange(e.target.value)}
           placeholder="输入城市或区县名称（支持中文）"
-          className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1"
+          className="w-full h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-2 text-xs text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring mt-1"
         />
         {showDropdown && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto">
             {suggestions.map((s) => (
               <button key={s.adcode} onClick={() => selectLocation(s.name, s.adcode)}
-                className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2 cursor-pointer"
+                className="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-white/[0.08] flex items-center gap-2 cursor-pointer"
               >
-                <span className="text-gray-900 dark:text-gray-100">{s.name}</span>
+                <span className="text-gray-900 dark:text-zinc-100">{s.name}</span>
                 <span className="text-[10px] text-gray-400 ml-auto">{s.level === "district" ? "区/县" : "市"}</span>
               </button>
             ))}
@@ -185,10 +185,10 @@ function CitySearch({ apiKey, city, cityCode, onUpdate }: {
         )}
       </div>
       <div>
-        <label className="text-xs text-gray-500 dark:text-gray-400">城市代码</label>
+        <label className="text-xs text-gray-500 dark:text-zinc-400">城市代码</label>
         <div className="flex items-center gap-1 mt-1">
           <input value={cityCode} onChange={(e) => onUpdate({ apiKey, city, cityCode: e.target.value })}
-            className="flex-1 h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-2 text-xs text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring"
           />
           {searching && <Loader2 className="size-3 animate-spin text-gray-400 shrink-0" />}
         </div>
@@ -248,7 +248,7 @@ export function SettingsDialog({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer header-icon"
+        className="p-1.5 rounded-lg text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer header-icon"
         aria-label={t("settings.title")}
       >
         <Settings className="size-4" />
@@ -257,26 +257,26 @@ export function SettingsDialog({
       {open && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md mx-4 transition-colors duration-300 flex flex-col max-h-[85vh] overflow-hidden">
+          <div className="relative bg-white dark:bg-zinc-950 rounded-2xl shadow-xl w-full max-w-md mx-4 transition-colors duration-300 flex flex-col max-h-[85vh] overflow-hidden">
             <div className="flex items-center justify-between px-4 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-4 shrink-0">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t("settings.title")}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t("settings.description")}</p>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-100">{t("settings.title")}</h2>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">{t("settings.description")}</p>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+                className="p-1.5 rounded-lg text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors cursor-pointer shrink-0"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             <div className="px-4 sm:px-6 shrink-0">
-              <div className="flex bg-gray-100 dark:bg-slate-800 rounded-lg p-1">
+              <div className="flex bg-gray-100 dark:bg-white/5 rounded-lg p-1">
                 <button
                   onClick={() => setTab("webdav")}
                   className={`flex-1 py-1.5 text-sm rounded-md transition-all cursor-pointer ${
-                    tab === "webdav" ? "bg-white dark:bg-slate-700 shadow-sm font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                    tab === "webdav" ? "bg-white dark:bg-white/10 shadow-sm font-medium text-gray-900 dark:text-zinc-100" : "text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-300"
                   }`}
                 >
                   {t("settings.webdav_sync")}
@@ -284,7 +284,7 @@ export function SettingsDialog({
                 <button
                   onClick={() => setTab("local")}
                   className={`flex-1 py-1.5 text-sm rounded-md transition-all cursor-pointer ${
-                    tab === "local" ? "bg-white dark:bg-slate-700 shadow-sm font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                    tab === "local" ? "bg-white dark:bg-white/10 shadow-sm font-medium text-gray-900 dark:text-zinc-100" : "text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-300"
                   }`}
                 >
                   {t("settings.local_export")}
@@ -292,7 +292,7 @@ export function SettingsDialog({
                 <button
                   onClick={() => setTab("prefs")}
                   className={`flex-1 py-1.5 text-sm rounded-md transition-all cursor-pointer ${
-                    tab === "prefs" ? "bg-white dark:bg-slate-700 shadow-sm font-medium text-gray-900 dark:text-gray-100" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                    tab === "prefs" ? "bg-white dark:bg-white/10 shadow-sm font-medium text-gray-900 dark:text-zinc-100" : "text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-300"
                   }`}
                 >
                   {t("settings.preferences")}
@@ -304,35 +304,35 @@ export function SettingsDialog({
               {tab === "webdav" ? (
                 <>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.server_url")}</label>
-                    <input value={server} onChange={(e) => setServer(e.target.value)} placeholder={t("settings.server_placeholder")} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+                    <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("settings.server_url")}</label>
+                    <input value={server} onChange={(e) => setServer(e.target.value)} placeholder={t("settings.server_placeholder")} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.username")}</label>
-                    <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder={t("settings.username_placeholder")} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+                    <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("settings.username")}</label>
+                    <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder={t("settings.username_placeholder")} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("settings.password")}</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••" className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring" />
+                    <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{t("settings.password")}</label>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••" className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring" />
                   </div>
-                  <button onClick={handleSave} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer">
+                  <button onClick={handleSave} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-white/10 text-sm text-gray-700 dark:text-zinc-100 hover:bg-gray-50 dark:hover:bg-white/[0.08] transition-colors cursor-pointer">
                     {saved ? <><Check className="size-3.5 inline mr-1" />{t("settings.saved")}</> : t("settings.save_credentials")}
                   </button>
                   <div className="flex gap-2">
-                    <button onClick={onPull} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
+                    <button onClick={onPull} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
                       {syncing ? <Loader2 className="size-4 animate-spin" /> : <Cloud className="size-4" />}
                       {t("settings.pull")}
                     </button>
-                    <button onClick={onPush} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-slate-600 text-white text-sm hover:bg-gray-800 dark:hover:bg-slate-500 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
+                    <button onClick={onPush} disabled={syncing} className="flex-1 h-8 sm:h-9 rounded-xl bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center gap-1">
                       {syncing ? <Loader2 className="size-4 animate-spin" /> : <Cloud className="size-4" />}
                       {t("settings.push")}
                     </button>
                   </div>
-                  {syncMsg && <p className="text-xs text-center text-gray-500 dark:text-gray-400">{translateMsg(t, syncMsg)}</p>}
+                  {syncMsg && <p className="text-xs text-center text-gray-500 dark:text-zinc-400">{translateMsg(t, syncMsg)}</p>}
                 </>
               ) : tab === "local" ? (
                 <>
-                  <button onClick={onExport} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer flex items-center justify-center gap-1">
+                  <button onClick={onExport} className="w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-white/10 text-sm text-gray-700 dark:text-zinc-100 hover:bg-gray-50 dark:hover:bg-white/[0.08] transition-colors cursor-pointer flex items-center justify-center gap-1">
                     <Download className="size-4" /> {t("settings.export_json")}
                   </button>
                   <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) onImport(f); }} />
@@ -340,18 +340,18 @@ export function SettingsDialog({
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) onImport(f); }}
                     onClick={() => fileRef.current?.click()}
-                    className="w-full h-20 rounded-xl border-2 border-dashed border-gray-300 dark:border-slate-600 text-sm text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer flex flex-col items-center justify-center gap-1"
+                    className="w-full h-20 rounded-xl border-2 border-dashed border-gray-300 dark:border-white/10 text-sm text-gray-500 dark:text-zinc-400 hover:border-gray-400 dark:hover:border-white/20 hover:bg-gray-50 dark:hover:bg-white/[0.08] transition-colors cursor-pointer flex flex-col items-center justify-center gap-1"
                   >
                     <Upload className="size-4" />
                     <span>{t("settings.import_json")}</span>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500">支持拖拽 .json 文件到此处</span>
+                    <span className="text-[10px] text-gray-400 dark:text-zinc-500">支持拖拽 .json 文件到此处</span>
                   </div>
-                  {syncMsg && <p className="text-xs text-center text-gray-500 dark:text-gray-400">{translateMsg(t, syncMsg)}</p>}
+                  {syncMsg && <p className="text-xs text-center text-gray-500 dark:text-zinc-400">{translateMsg(t, syncMsg)}</p>}
                 </>
               ) : (
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300">
                       <Languages className="size-4 text-gray-400" />
                       <span>Language / 语言</span>
                     </div>
@@ -361,13 +361,13 @@ export function SettingsDialog({
                         i18n.changeLanguage(next);
                         localStorage.setItem("navidash-lang", next);
                       }}
-                      className="px-3 h-8 rounded-lg text-xs font-medium border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                      className="px-3 h-8 rounded-lg text-xs font-medium border border-gray-200 dark:border-white/10 text-gray-700 dark:text-zinc-100 hover:bg-gray-50 dark:hover:bg-white/[0.08] transition-colors cursor-pointer"
                     >
                       {i18n.language === "zh" ? "English" : "中文"}
                     </button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300">
                       {showWeather ? <Eye className="size-4 text-gray-400" /> : <EyeOff className="size-4 text-gray-400" />}
                       <span>{t("settings.weather")}</span>
                     </div>
@@ -375,7 +375,7 @@ export function SettingsDialog({
                       onClick={onToggleWeather}
                       className={`px-3 h-8 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                         showWeather
-                          ? "border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700"
+                          ? "border-gray-200 dark:border-white/10 text-gray-700 dark:text-zinc-100 hover:bg-gray-50 dark:hover:bg-white/[0.08]"
                           : "border-red-200 dark:border-red-800 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                       }`}
                     >
@@ -385,8 +385,8 @@ export function SettingsDialog({
                   {showWeather && (
                     <div className="space-y-2">
                       <div>
-                        <label className="text-xs text-gray-500 dark:text-gray-400">API Key</label>
-                        <input value={weatherLoc.apiKey} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, apiKey: e.target.value })} placeholder="高德开放平台 → 应用管理 → Key" className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                        <label className="text-xs text-gray-500 dark:text-zinc-400">API Key</label>
+                        <input value={weatherLoc.apiKey} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, apiKey: e.target.value })} placeholder="高德开放平台 → 应用管理 → Key" className="w-full h-8 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-2 text-xs text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
                       </div>
                       <CitySearch
                         apiKey={weatherLoc.apiKey}
@@ -397,8 +397,8 @@ export function SettingsDialog({
                     </div>
                   )}
 
-                  <div className="border-t border-gray-100 dark:border-slate-800 pt-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  <div className="border-t border-gray-100 dark:border-white/10 pt-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300 mb-3">
                       <ImageIcon className="size-4 text-gray-400" />
                       <span>{t("settings.background")}</span>
                     </div>
@@ -407,8 +407,8 @@ export function SettingsDialog({
                         onClick={() => onUpdateBg({ enabled: false })}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                           !bgConfig.enabled
-                            ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100"
-                            : "border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700"
+                            ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-gray-900 dark:border-white/10"
+                            : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/[0.08]"
                         }`}
                       >
                         {t("settings.bg_disable")}
@@ -417,8 +417,8 @@ export function SettingsDialog({
                         onClick={() => onUpdateBg({ enabled: true, type: "bing" })}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                           bgConfig.enabled && bgConfig.type === "bing"
-                            ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100"
-                            : "border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700"
+                            ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-gray-900 dark:border-white/10"
+                            : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/[0.08]"
                         }`}
                       >
                         <Link className="size-3 inline mr-1" />{t("settings.bg_bing")}
@@ -427,8 +427,8 @@ export function SettingsDialog({
                         onClick={() => onUpdateBg({ enabled: true, type: "custom" })}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                           bgConfig.enabled && bgConfig.type === "custom"
-                            ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100"
-                            : "border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700"
+                            ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-gray-900 dark:border-white/10"
+                            : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/[0.08]"
                         }`}
                       >
                         <Link className="size-3 inline mr-1" />{t("settings.bg_custom")}
@@ -437,8 +437,8 @@ export function SettingsDialog({
                         onClick={() => bgFileRef.current?.click()}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                           bgConfig.enabled && bgConfig.type === "upload"
-                            ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100"
-                            : "border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700"
+                            ? "bg-gray-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-gray-900 dark:border-white/10"
+                            : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-white/[0.08]"
                         }`}
                       >
                         <FileUp className="size-3 inline mr-1" />{t("settings.bg_upload")}
@@ -449,7 +449,7 @@ export function SettingsDialog({
                         value={bgConfig.customUrl}
                         onChange={(e) => onUpdateBg({ customUrl: e.target.value })}
                         placeholder="https://example.com/image.jpg"
-                        className="mt-2 w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring"
+                        className="mt-2 w-full h-8 sm:h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 text-sm text-gray-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-ring"
                       />
                     )}
                     <input
