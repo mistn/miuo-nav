@@ -67,7 +67,7 @@ export function Sidebar({ bookmarks, onDelete }: SidebarProps) {
       {open && (
         <div className="fixed inset-0 z-[100]">
           <div className="absolute inset-0 bg-black/50 transition-opacity" onClick={() => setOpen(false)} />
-          <div className="absolute inset-y-0 left-0 w-80 bg-white dark:bg-slate-900 shadow-xl flex flex-col transition-colors duration-300">
+          <div className="absolute inset-y-0 left-0 w-[85vw] sm:w-80 bg-white dark:bg-slate-900 shadow-xl flex flex-col transition-colors duration-300">
             <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-slate-800">
               <div>
                 <h2 className="font-semibold text-gray-900 dark:text-gray-100">{t("sidebar.title")}</h2>

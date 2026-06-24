@@ -199,16 +199,16 @@ export function SettingsDialog({
                   {showWeather && (
                     <div className="grid grid-cols-3 gap-2">
                       <div>
-                        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_lat")}</label>
-                        <input value={weatherLoc.lat} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, lat: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_lon")}</label>
-                        <input value={weatherLoc.lon} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, lon: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                        <label className="text-xs text-gray-500 dark:text-gray-400">API Key</label>
+                        <input value={weatherLoc.apiKey} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, apiKey: e.target.value })} placeholder="高德 API Key" className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 dark:text-gray-400">{t("settings.weather_city")}</label>
                         <input value={weatherLoc.city} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, city: e.target.value })} className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 dark:text-gray-400">City Code</label>
+                        <input value={weatherLoc.cityCode} onChange={(e) => onUpdateWeatherLoc({ ...weatherLoc, cityCode: e.target.value })} placeholder="310000" className="w-full h-8 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-ring mt-1" />
                       </div>
                     </div>
                   )}

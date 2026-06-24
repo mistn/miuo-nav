@@ -137,7 +137,7 @@ export function ShortcutsGrid({ bookmarks, onAdd, onRemove, onUpdate, onMove }: 
 
   return (
     <>
-      <div className="flex flex-wrap justify-center gap-6 mt-12">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-8 sm:mt-12">
         {visible.map((item) => {
           const domain = getDomain(item.href);
           const Icon = ICON_MAP[item.icon] ?? Globe;

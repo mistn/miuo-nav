@@ -12,12 +12,12 @@ import { useTheme } from "@/hooks/useTheme";
 import { useBackground } from "@/hooks/useBackground";
 
 export interface WeatherLocation {
-  lat: string;
-  lon: string;
+  apiKey: string;
+  cityCode: string;
   city: string;
 }
 
-const DEFAULT_WEATHER: WeatherLocation = { lat: "31.2304", lon: "121.4737", city: "Shanghai" };
+const DEFAULT_WEATHER: WeatherLocation = { apiKey: "", cityCode: "310000", city: "Shanghai" };
 
 function loadWeatherLocation(): WeatherLocation {
   try {
@@ -65,13 +65,13 @@ function AppContent() {
       <div className={`relative z-10 flex flex-col min-h-screen transition-colors duration-300 ${
         bgActive ? "bg-transparent" : "bg-slate-50 dark:bg-slate-950"
       }`}>
-        <header className="relative z-50 flex items-center justify-between px-8 pt-7">
+        <header className="relative z-50 flex items-center justify-between px-4 sm:px-8 pt-4 sm:pt-7 flex-wrap gap-2">
           <div className="flex items-center gap-3">
             <Sidebar bookmarks={bookmarks} onDelete={handleDelete} />
           </div>
 
-          <div className="flex items-center gap-4">
-            {showWeather && <WeatherWidget lat={weatherLoc.lat} lon={weatherLoc.lon} city={weatherLoc.city} />}
+          <div className="flex items-center gap-1 sm:gap-4">
+            {showWeather && <WeatherWidget apiKey={weatherLoc.apiKey} cityCode={weatherLoc.cityCode} city={weatherLoc.city} />}
             <TimeWidget />
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <SettingsDialog

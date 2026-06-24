@@ -2,32 +2,21 @@ import { useState, useEffect } from "react";
 import { CloudSun, CloudOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-interface WeatherData {
-  temperature: number;
-  description: string;
-}
-
 interface WeatherWidgetProps {
-  lat: string;
-  lon: string;
+  apiKey: string;
+  cityCode: string;
   city: string;
 }
 
-export function WeatherWidget({ lat, lon, city }: WeatherWidgetProps) {
+export function WeatherWidget({ apiKey, cityCode, city }: WeatherWidgetProps) {
   const { t } = useTranslation();
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [weather, setWeather] = useState<{ temperature: string; description: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  const wmoCodes: Record<number, string> = {
-    0: t("weather.clear"), 1: t("weather.mainly_clear"), 2: t("weather.partly_cloudy"), 3: t("weather.overcast"),
-    45: t("weather.fog"), 48: t("weather.rime_fog"), 51: t("weather.light_drizzle"), 53: t("weather.drizzle"), 55: t("weather.dense_drizzle"),
-    61: t("weather.light_rain"), 63: t("weather.rain"), 65: t("weather.heavy_rain"),
-    71: t("weather.light_snow"), 73: t("weather.snow"), 75: t("weather.heavy_snow"),
-    80: t("weather.showers"), 81: t("weather.moderate_showers"), 82: t("weather.violent_showers"), 95: t("weather.thunderstorm"),
-  };
-
   useEffect(() => {
+    if (!apiKey || !cityCode) { setIsLoading(false); setIsError(true); return; }
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -36,22 +25,17 @@ export function WeatherWidget({ lat, lon, city }: WeatherWidgetProps) {
         setIsLoading(true);
         setIsError(false);
         const response = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`,
+          `https://restapi.amap.com/v3/weather/weatherInfo?key=${apiKey}&city=${cityCode}&extensions=base`,
           { signal: controller.signal }
         );
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const current = data.current;
+        if (data.status !== "1" || !data.lives?.[0]) throw new Error(data.info);
         setWeather({
-          temperature: Math.round(current.temperature_2m),
-          description: wmoCodes[current.weather_code] ?? "—",
+          temperature: data.lives[0].temperature,
+          description: data.lives[0].weather,
         });
-      } catch (error) {
-        if (error instanceof Error && error.name === "AbortError") {
-          console.warn("Weather API request timed out");
-        } else {
-          console.warn("Weather API fetch failed:", error);
-        }
+      } catch {
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -61,8 +45,16 @@ export function WeatherWidget({ lat, lon, city }: WeatherWidgetProps) {
 
     fetchWeather();
     return () => { controller.abort(); clearTimeout(timeoutId); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lon]);
+  }, [apiKey, cityCode]);
+
+  if (!apiKey || !cityCode) {
+    return (
+      <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500">
+        <CloudOff className="size-4" />
+        <span>{t("weather.offline")}</span>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

@@ -60,7 +60,7 @@ export function SearchBar() {
   }, []);
 
   return (
-    <div className="flex items-center w-full max-w-2xl rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-4 py-2.5 shadow-sm border border-gray-100/80 dark:border-slate-700/80 transition-all duration-300">
+    <div className="flex items-center w-full max-w-[95vw] sm:max-w-2xl rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 shadow-sm border border-gray-100/80 dark:border-slate-700/80 transition-all duration-300">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="flex w-10 shrink-0 items-center justify-center rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:outline-none focus-visible:ring-offset-0">

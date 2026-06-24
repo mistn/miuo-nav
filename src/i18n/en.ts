@@ -79,8 +79,6 @@ export default {
     imported: "Imported successfully",
     invalid_json: "Invalid JSON file",
     weather: "Weather",
-    weather_lat: "Latitude",
-    weather_lon: "Longitude",
     weather_city: "City Name",
     background: "Background",
     bg_bing: "Bing Daily",
